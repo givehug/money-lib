@@ -1,14 +1,20 @@
 # WIP
 
-## SIMPLE _lib to work with_ Money
+###_SIMPLE cross-platform TypeScript library to work with money_
 
 ### Features
 
-- Inspired by go-money, js-money, and common sense (not dinero.js), apparently also originally inspired by Martin Fowlers' pattern
-- Simple, easy to contribute, all documentation is here (this is os library, not a f\*\*\* startup)
-- Works with plain serialized `Money` type which only stores information about its `amount` value and `currency` and can be used in your app as you wish, eg in redux state
-- Represents monetary values as integers, in cents. This avoids floating point rounding errors.
-- Typed, functional (chaining is supported only until the release of pipe operator)
+- Inspired by go-money, js-money, and common sense (not dinero.js), apparently
+  also originally inspired by Martin Fowlers' pattern
+- Simple, easy to contribute, all documentation is here (this is os library, not
+  a f\*\*\* startup)
+- Works with plain serialized `Money` type which only stores information about
+  its `amount` value and `currency` and can be used in your app as you wish, eg
+  in redux state
+- Represents monetary values as integers, in cents. This avoids floating point
+  rounding errors.
+- Typed, functional (chaining is supported only until the release of pipe
+  operator)
 - Provides parsing and formatting
 - Provides methods for basic arithmetics
 - Throws only during setup if config is invalid
@@ -36,7 +42,7 @@ const balanceAfterDebit = money.subtract(accountBalance, debitTransaction);
 const interestRate = 0.12;
 const finalBalance = money.add(
   balanceAfterDebit,
-  money.multiply(balanceAfterDebit, interestRate)
+  money.multiply(balanceAfterDebit, interestRate),
 );
 
 console.log(money.format(finalBalance));
@@ -67,7 +73,7 @@ console.log(m);
 // unwrap (serialize) Money from chain
 const m2: Money = m.toJSON();
 
-console.log(2);
+console.log(m2);
 
 // { amount: 4200, currency: 'EUR' }
 ```
@@ -238,9 +244,5 @@ money.config({
 
 ## TODO
 
-**`toInt: (m: Money) => number`**
-**`toFloat: (m: Money) => number`**
-**`greaterThen`**
-**`equals`**
-**`lessThen`**
-**`...`** check type definitions
+**`toInt: (m: Money) => number`** **`toFloat: (m: Money) => number`**
+**`greaterThen`** **`equals`** **`lessThen`** **`...`** check type definitions

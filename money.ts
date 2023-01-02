@@ -2,7 +2,7 @@ import {
   config,
   getCurrency,
   //  getLocale
-} from "./config";
+} from "./config.ts";
 
 export type Money = {
   amount: number; // Integer representing cents

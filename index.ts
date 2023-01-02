@@ -8,9 +8,13 @@ import {
   isValid,
   fromFloat,
   zero,
-} from "./money";
+} from "./money.ts";
 
-import type { Money } from "./money";
+import type { Money } from "./money.ts";
+
+export type { Money };
+
+export { fromInt, add, subtract, multiply, format, zero, fromFloat, divide };
 
 type ChainedMoney = { toJSON: () => Money };
 
@@ -51,7 +55,3 @@ const moneyChain = (money: Money | ChainedMoney = zero()) => {
 };
 
 export default moneyChain;
-
-export { fromInt, add, subtract, multiply, format, zero, fromFloat, divide };
-
-export type { Money };

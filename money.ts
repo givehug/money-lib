@@ -2,7 +2,7 @@ import {
   config,
   getCurrency,
   //  getLocale
-} from "./config.ts";
+} from "./config";
 
 export type Money = {
   amount: number; // Integer representing cents
@@ -13,8 +13,22 @@ const getCurrencyScale = (m: Money): number => {
   return 10 ** getCurrency(m.currency).precision;
 };
 
-// TODO:
-// - `parse: (s: string) => Money`
+export const parse = (
+  s: string,
+  currency: string,
+  decimalSeparator = getCurrency(currency).decimalSeparator
+): Money => {
+  const amountFloatString = {
+    ",": () =>
+      s
+        .replace(/[^0-9.,]/g, "")
+        .replace(/\./g, "")
+        .replace(/\,/g, "."),
+    ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
+  }[decimalSeparator]();
+  const amountFloat = parseFloat(amountFloatString);
+  return fromFloat(amountFloat, currency);
+};
 
 export const zero = (currency = config.defaultCurrency) => {
   return { amount: 0, currency };

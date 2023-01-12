@@ -9,6 +9,7 @@ type Currency = {
   precision: number;
   code: string;
   symbol: string;
+  decimalSeparator: "." | ",";
 };
 
 // type Locale = {
@@ -24,6 +25,13 @@ export const config: Config = {
       code: "EUR",
       symbol: "€",
       precision: 2,
+      decimalSeparator: ",",
+    },
+    USD: {
+      code: "USD",
+      symbol: "$",
+      precision: 2,
+      decimalSeparator: ".",
     },
   },
   // locales: {

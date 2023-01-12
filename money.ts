@@ -41,8 +41,6 @@ export const fromInt = (
   return { amount, currency };
 };
 
-export const money = fromInt;
-
 export const fromFloat = (
   amount: number,
   currency = config.defaultCurrency,
@@ -66,11 +64,11 @@ export const toFloat = (m: Money): number => {
 };
 
 export const add = (a: Money, b: Money): Money => {
-  return money(a.amount + b.amount, a.currency);
+  return fromInt(a.amount + b.amount, a.currency);
 };
 
 export const subtract = (a: Money, b: Money): Money => {
-  return money(a.amount - b.amount, a.currency);
+  return fromInt(a.amount - b.amount, a.currency);
 };
 
 export const multiply = (
@@ -78,7 +76,7 @@ export const multiply = (
   multiplier: number,
   round = Math.round
 ): Money => {
-  return money(round(m.amount * multiplier), m.currency);
+  return fromInt(round(m.amount * multiplier), m.currency);
 };
 
 export const divide = (
@@ -86,7 +84,7 @@ export const divide = (
   divider: number,
   round = Math.round
 ): Money => {
-  return money(round(m.amount / divider), m.currency);
+  return fromInt(round(m.amount / divider), m.currency);
 };
 
 export const compare = (a: Money, b: Money): -1 | 0 | 1 => {

@@ -1,6 +1,6 @@
 # WIP
 
-###_SIMPLE cross-platform TypeScript library to work with money_
+### _SIMPLE cross-platform TypeScript library to work with money_
 
 ### Features
 
@@ -31,29 +31,10 @@ type Money = {
 
 ### Usage
 
-**_standalone funcs_**:
+**_chained_**:
 
 ```ts
-import * as money from "money-lib";
-
-const accountBalance = { amount: 12345699, currency: "EUR" };
-const debitTransaction = money.fromFloat(1.99, "EUR");
-const balanceAfterDebit = money.subtract(accountBalance, debitTransaction);
-const interestRate = 0.12;
-const finalBalance = money.add(
-  balanceAfterDebit,
-  money.multiply(balanceAfterDebit, interestRate),
-);
-
-console.log(money.format(finalBalance));
-
-// €138.269,60
-```
-
-**_chaining_**:
-
-```ts
-import money, { Money } from "money-lib";
+import { money, Money } from "money-lib";
 
 const m = money()
   .debug()
@@ -76,6 +57,25 @@ const m2: Money = m.toJSON();
 console.log(m2);
 
 // { amount: 4200, currency: 'EUR' }
+```
+
+**_standalone funcs_**:
+
+```ts
+import * as money from "money-lib";
+
+const accountBalance = { amount: 12345699, currency: "EUR" };
+const debitTransaction = money.fromFloat(1.99, "EUR");
+const balanceAfterDebit = money.subtract(accountBalance, debitTransaction);
+const interestRate = 0.12;
+const finalBalance = money.add(
+  balanceAfterDebit,
+  money.multiply(balanceAfterDebit, interestRate),
+);
+
+console.log(money.format(finalBalance));
+
+// €138.269,60
 ```
 
 ### API

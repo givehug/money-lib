@@ -4,7 +4,7 @@ import { describe, test } from "node:test";
 import * as money from "../../index";
 
 describe("unchained", () => {
-  describe("basic use cased", () => {
+  describe("basic use cases", () => {
     test("arithmetics and money formatting", () => {
       const accountBalance = { amount: 12345699, currency: "EUR" };
       const debitTransaction = money.fromFloat(1.99, "EUR");
@@ -23,7 +23,21 @@ describe("unchained", () => {
     });
   });
 
-  describe("parse", () => {
+  describe("initialization", () => {});
+
+  describe("serialization", () => {});
+
+  describe("arithmetics", () => {});
+
+  describe("comparison", () => {});
+
+  describe("formatting", () => {});
+
+  describe("validation", () => {});
+
+  describe("transformation", () => {});
+
+  describe("parsings", () => {
     test("EUR", () => {
       const expected = {
         currency: "EUR",

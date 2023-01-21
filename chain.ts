@@ -16,9 +16,8 @@ import type { Money } from "./money";
 type ChainedMoney = { toJSON: () => Money };
 
 // Helper wrapper to allow chaining
-// TODO: can we make it simpler (do we need to)?
 const moneyChain = (money: Money | ChainedMoney = zero()) => {
-  // unwrap Money from chains, or init with zero value
+  // unwrap Money from chain, or init with zero value
   const _m: Money = isValid(money) ? money : money.toJSON();
 
   return {

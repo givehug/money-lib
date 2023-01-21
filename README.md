@@ -1,26 +1,17 @@
-# WIP
+# WIP: TS-Money
 
-### _SIMPLE cross-platform TypeScript library to work with money_
+### _Simple TypeScript library to work with money_ (cross-platform)
 
 ### Features
 
-- Inspired by go-money, js-money, and common sense (not dinero.js), apparently
-  also originally inspired by Martin Fowlers' pattern
-- Simple, easy to contribute, all documentation is here (this is os library, not
-  a f\*\*\* startup)
-- Works with plain serialized `Money` type which only stores information about
-  its `amount` value and `currency` and can be used in your app as you wish, eg
-  in redux state
-- Represents monetary values as integers, in cents. This avoids floating point
-  rounding errors.
-- Typed, functional (chaining is supported only until the release of pipe
-  operator)
-- Provides parsing and formatting
-- Provides methods for basic arithmetics
-- Throws only during setup if config is invalid
-- Works in different environments (browsers, node, deno, react-native, etc)
+- Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code 
+  (can be used in your app as you wish, eg in redux state)
+- Represents amount values as integers, in cents. This avoids floating point rounding errors.
+- Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
+- Works everywhere (browsers, node, deno, react-native, etc)
+- Inspired by [go-money](https://github.com/Rhymond/go-money) and [js-money](https://github.com/davidkalosi/js-money)
 
-### Money type
+### _Money_ type
 
 ```ts
 type Money = {
@@ -37,29 +28,23 @@ type Money = {
 import { money, Money } from "money-lib";
 
 const m = money()
-  .debug()
+  .debug() // money: { amount: 0, currency: 'EUR' }
   .add({ amount: 4499, currency: "EUR" })
   .subtract({ amount: 299, currency: "EUR" })
-  .debug()
+  .debug() // money: { amount: 4200, currency: 'EUR' }
   .multiply(5.56399)
   .divide(5.56399)
   .format();
 
-console.log(m);
-
-// money: { amount: 0, currency: 'EUR' }
-// money: { amount: 4200, currency: 'EUR' }
-// €42,00
+console.log(m); // €42,00
 
 // unwrap (serialize) Money from chain
 const m2: Money = m.toJSON();
 
-console.log(m2);
-
-// { amount: 4200, currency: 'EUR' }
+console.log(m2); // { amount: 4200, currency: 'EUR' }
 ```
 
-**_standalone funcs_**:
+**_standalone functions_**:
 
 ```ts
 import * as money from "money-lib";
@@ -73,176 +58,200 @@ const finalBalance = money.add(
   money.multiply(balanceAfterDebit, interestRate),
 );
 
-console.log(money.format(finalBalance));
-
-// €138.269,60
+console.log(money.format(finalBalance)); // €138.269,60
 ```
+
+### TODO:
+- tests
+- decide if formatting should be based on currency or locale
 
 ### API
 
-#### Create
+
+#### Initialization:
+
+**`zero = (currency = config.defaultCurrency) => Money`**
 
 **`fromInt: (amount: number, currency?: string) => Money`**
 
-```js
-money.fromInt(4299, 'EUR') -> {
-    amount: 4299,
-    currency: "EUR",
-};
-```
+<details>
+  <summary>Example</summary>
+
+  ```js
+  fromInt(4299, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+  ```
+</details>
+<br/>
 
 **`fromFloat: (amount: number, currency?: string) => Money`**
 
-```js
-money.fromFloat(42.99, 'EUR') -> {
-    amount: 4299,
-    currency: "EUR",
-};
+<details>
+  <summary>Example</summary>
 
-// number is always ceiled to 2 fractional digits
-money.fromFloat(42.999, 'EUR') -> {
-   amount: 4299,
-   currency: "EUR",
-};
+  ```js
+  fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+  fromFloat(42.999, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+  fromFloat(42.9, 'EUR') -> Money{amount: 4290, currency: "EUR"};
+  ``` 
+</details>
+<br/>
 
-money.fromFloat(4299.9, 'EUR') -> {
-    amount: 4290,
-    currency: "EUR",
-};
-```
+#### Conversion to number:
 
-#### Parse
+**`toInt: (m: Money) => number`**
+
+**`toFloat: (m: Money) => number`**
+
+<br/>
+
+#### Arithmetics:
+
+**`add: (a: Money, b: Money) => Money`**
+
+**`subtract: (a: Money, b: Money) => Money`**
+
+**`multiply: (m: Money, multiplier: number) => Money`**
+
+**`divide: (m: Money, divider: number) => Money`**
+
+<br/>
+
+#### Comparison:
+
+**`compare: (a: Money, b: Money) => -1 | 0 | 1`**
+
+**`equals: (a: Money, b: Money) => boolean`**
+
+**`greaterThan: (a: Money, b: Money) => boolean`**
+
+**`greaterThanOrEqual: (a: Money, b: Money) => boolean`**
+
+**`lessThan: (a: Money, b: Money) => boolean`**
+
+**`lessThanOrEqual: (a: Money, b: Money) => boolean`**
+
+**`isZero: (m: Money) => boolean`**
+
+**`isPositive: (m: Money) => boolean`**
+
+**`isNegative: (m: Money) => boolean`**
+
+<br/>
+
+#### Validation:
+
+**`isValid: (m: Money) => m is Money`**
+
+<br/>
+
+#### Parsing:
 
 **`parse: (s: string) => Money`**
 
-```js
-money.parse("€123.555,99") -> {
-    amount: 12355599,
-    currency: "EUR",
-};
+<details>
+  <summary>Example</summary>
 
-// default currency
-money.parse("123.555,99") -> {
-    amount: 12355599,
-    currency: "EUR",
-};
+  ```js
+  parse("€123.555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-// comma decimal separator
-money.parse("€123555,99") -> {
-    amount: 12355599,
-    currency: "EUR",
-};
+  // default currency
+  parse("123.555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-// dot decimal separator
-money.parse("€123555.99") -> {
-    amount: 12355599,
-    currency: "EUR",
-};
+  // comma decimal separator
+  parse("€123555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-// no fraction digits
-money.parse("4299") -> {
-    amount: 429900,
-    currency: "EUR",
-};
+  // dot decimal separator
+  parse("€123555.99") -> Money{amount: 12355599, currency: "EUR"};
 
-// 1 fraction digit
-money.parse("€123555.1") -> {
-    amount: 12355510,
-    currency: "EUR",
-};
+  // no fraction digits
+  parse("4299") -> Money{amount: 429900, currency: "EUR"};
 
-// more than 2 fraction digits
-money.parse("€123555.999") -> {
-    amount: 12355599,
-    currency: "EUR",
-};
+  // 1 fraction digit
+  parse("€123555.1") -> Money{amount: 12355510, currency: "EUR"};
 
-// invalid input
-money.parse("€123555.99") -> {
-    amount: 0,
-    currency: "EUR",
-};
-```
+  // more than 2 fraction digits
+  parse("€123555.999") -> Money{amount: 12355599, currency: "EUR"};
 
-#### Format
+  // invalid input
+  parse("€123555.99") -> Money{amount: 0, currency: "EUR"};
+  ```
+</details>
+<br/>
+
+#### Formatting:
 
 **`format: (m: Money) => string`**
 
-```js
-money.format({
-    amount: 12355599,
-    currency: 'EUR',
-}) -> "€123.555,99"
-```
+<details>
+  <summary>Example</summary>
+
+  ```js
+  format({amount: 12355599, currency: 'EUR'}) -> "€123.555,99"
+  ```
+</details>
+<br/>
 
 **`formatParts: (m: Money) => FormattedParts`**
 
-```js
-money.formatParts({
-    amount: 12355599,
-    currency: 'EUR',
-}) -> {
+<details>
+  <summary>Example</summary>
+
+  ```js
+  formatParts({amount: 12355599, currency: 'EUR'}) -> {
     whole: '123555',
     wholeFormatted: '123.555',
     cents: '99',
     currencySymbol: '€',
     decimalSeparator: ',',
-}
-```
+  }
+  ```
+</details>
+<br/>
 
-#### Arithmetics
-
-**`add: (a: Money, b: Money) => Money`**
-**`subtract: (a: Money, b: Money) => Money`**
-**`multiply: (m: Money, multiplier: number) => Money`**
-**`divide: (m: Money, divider: number) => Money`**
-
-#### Misc
+#### Transformation:
 
 **`split: (m: Money) => { whole: number, fraction: number }`**
 
-```js
-money.split({
-    amount: 4599,
-    currency: 'EUR',
-}) -> {
-    whole: 45,
-    fraction: 99,
-}
-```
+<details>
+  <summary>Example</summary>
 
-#### Setup custom config
+  ```js
+  split({amount: 4599, currency: 'EUR'}) -> {whole: 45, fraction: 99}
+  ```
+</details>
+<br/>
+
+#### Setup config and currencies:
 
 **`config: (c: Config) => void`**
 
-```ts
-type Config = {
-  defaultCurrency?: string;
-  currencies?: Array<{
-    code: "EUR";
-    symbol: "€";
-    decimalSeparator: "." | ",";
-  }>;
-};
+<details>
+  <summary>Example</summary>
 
-money.config({
-  defaultCurrency: "EUR",
-  currencies: [
-    {
-      code: "EUR",
-      symbol: "€",
-      decimalSeparator: ",",
-    },
-    {
-      code: "USD",
-      symbol: "$",
-      decimalSeparator: ".",
-    },
-  ],
-});
-```
+  ```ts
+  type Config = {
+    defaultCurrency?: string;
+    currencies?: Array<{
+      code: "EUR";
+      symbol: "€";
+      decimalSeparator: "." | ",";
+    }>;
+  };
 
-## TODO
-
-**`toInt: (m: Money) => number`** **`toFloat: (m: Money) => number`**
-**`greaterThen`** **`equals`** **`lessThen`** **`...`** check type definitions
+  money.config({
+    defaultCurrency: "EUR",
+    currencies: [
+      {
+        code: "EUR",
+        symbol: "€",
+        decimalSeparator: ",",
+      },
+      {
+        code: "USD",
+        symbol: "$",
+        decimalSeparator: ".",
+      },
+    ],
+  });
+  ```
+</details>

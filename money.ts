@@ -9,26 +9,7 @@ export type Money = {
   currency: string; // Currency code (ISO 4217)
 };
 
-const getCurrencyScale = (m: Money): number => {
-  return 10 ** getCurrency(m.currency).precision;
-};
-
-export const parse = (
-  s: string,
-  currency: string,
-  decimalSeparator = getCurrency(currency).decimalSeparator
-): Money => {
-  const amountFloatString = {
-    ",": () =>
-      s
-        .replace(/[^0-9.,]/g, "")
-        .replace(/\./g, "")
-        .replace(/\,/g, "."),
-    ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
-  }[decimalSeparator]();
-  const amountFloat = parseFloat(amountFloatString);
-  return fromFloat(amountFloat, currency);
-};
+// ------ Initialization ------ //
 
 export const zero = (currency = config.defaultCurrency) => {
   return { amount: 0, currency };
@@ -53,6 +34,8 @@ export const fromFloat = (
   };
 };
 
+// ------ Serialization ------ //
+
 export const toInt = (m: Money): number => {
   return m.amount;
 };
@@ -62,6 +45,8 @@ export const toFloat = (m: Money): number => {
   const { whole, cents } = split(m);
   return whole + cents / scale;
 };
+
+// ------ Arithmetics ------ //
 
 export const add = (a: Money, b: Money): Money => {
   return fromInt(a.amount + b.amount, a.currency);
@@ -86,6 +71,8 @@ export const divide = (
 ): Money => {
   return fromInt(round(m.amount / divider), m.currency);
 };
+
+// ------ Comparison ------ //
 
 export const compare = (a: Money, b: Money): -1 | 0 | 1 => {
   if (a.amount === b.amount) {
@@ -126,6 +113,8 @@ export const isNegative = (m: Money): boolean => {
   return m.amount < 0;
 };
 
+// ------ Validation ------ //
+
 export const isValid = (m: any): m is Money => {
   // TODO: check m.amount boundaries
   return Boolean(
@@ -136,11 +125,20 @@ export const isValid = (m: any): m is Money => {
   );
 };
 
+// ------ Transformation ------ //
+
 export const split = (m: Money): { whole: number; cents: number } => {
   const scale = getCurrencyScale(m);
   const whole = Math.trunc(m.amount / scale);
   const cents = m.amount - whole * scale;
   return { whole, cents };
+};
+
+// ------ Formatting ------ //
+
+export const format = (m: Money, locale = config.defaultLocale): string => {
+  const parts = formatParts(m, locale);
+  return `${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
 };
 
 export const formatParts = (
@@ -172,7 +170,27 @@ export const formatParts = (
   };
 };
 
-export const format = (m: Money, locale = config.defaultLocale): string => {
-  const parts = formatParts(m, locale);
-  return `${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
+// ------ Parsing ------ //
+
+export const parse = (
+  s: string,
+  currency: string,
+  decimalSeparator = getCurrency(currency).decimalSeparator
+): Money => {
+  const amountFloatString = {
+    ",": () =>
+      s
+        .replace(/[^0-9.,]/g, "")
+        .replace(/\./g, "")
+        .replace(/\,/g, "."),
+    ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
+  }[decimalSeparator]();
+  const amountFloat = parseFloat(amountFloatString);
+  return fromFloat(amountFloat, currency);
+};
+
+// ------ Helper methods ------ //
+
+const getCurrencyScale = (m: Money): number => {
+  return 10 ** getCurrency(m.currency).precision;
 };

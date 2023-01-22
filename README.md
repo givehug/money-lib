@@ -63,7 +63,12 @@ console.log(money.format(finalBalance)); // €138.269,60
 
 ### TODO:
 - tests
-- decide if formatting should be based on currency or locale
+- decide if formatting should be based on currency or locale (or both, or any) 
+- add optional debug callback
+- make it simpler to do operations with numbers eg money().add(50) instead of money().add({amount: 50, currency: 'EUR}) (is it obvious with ints / floats?)
+- fromNumber (float or int)
+- .editorconfig
+- build to js and make it work with Deno
 
 ### API
 

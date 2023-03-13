@@ -262,10 +262,10 @@ describe("chained", () => {
         currency: "EUR",
         amount: 1050099,
       };
-      assert.deepEqual(money().parse("10.500,99", "EUR"), expected);
-      assert.deepEqual(money().parse("10500,99", "EUR"), expected);
-      assert.deepEqual(money().parse("10_500 , 99", "EUR"), expected);
-      assert.notDeepEqual(money().parse("10500.99", "EUR"), expected);
+      assert.deepEqual(money().parse("10.500,99", "EUR").toJSON(), expected);
+      assert.deepEqual(money().parse("10500,99", "EUR").toJSON(), expected);
+      assert.deepEqual(money().parse("10_500 , 99", "EUR").toJSON(), expected);
+      assert.notDeepEqual(money().parse("10500.99", "EUR").toJSON(), expected);
     });
 
     test("explicit decimal separator", () => {
@@ -274,19 +274,19 @@ describe("chained", () => {
         amount: 1050099,
       };
       assert.deepEqual(
-        money().parse("10,500.99", "EUR", undefined, "."),
+        money().parse("10,500.99", "EUR", undefined, ".").toJSON(),
         expected
       );
       assert.deepEqual(
-        money().parse("10500.99", "EUR", undefined, "."),
+        money().parse("10500.99", "EUR", undefined, ".").toJSON(),
         expected
       );
       assert.deepEqual(
-        money().parse("10_500 . 99", "EUR", undefined, "."),
+        money().parse("10_500 . 99", "EUR", undefined, ".").toJSON(),
         expected
       );
       assert.notDeepEqual(
-        money().parse("10.500,99", "EUR", undefined, "."),
+        money().parse("10.500,99", "EUR", undefined, ".").toJSON(),
         expected
       );
     });

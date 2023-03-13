@@ -4,7 +4,7 @@
 
 ### Features
 
-- Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code 
+- Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code
   (can be used in your app as you wish, eg in redux state)
 - Represents amount values as integers, in cents. This avoids floating point rounding errors.
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
@@ -55,15 +55,16 @@ const balanceAfterDebit = money.subtract(accountBalance, debitTransaction);
 const interestRate = 0.12;
 const finalBalance = money.add(
   balanceAfterDebit,
-  money.multiply(balanceAfterDebit, interestRate),
+  money.multiply(balanceAfterDebit, interestRate)
 );
 
 console.log(money.format(finalBalance)); // €138.269,60
 ```
 
 ### TODO:
+
 - tests
-- decide if formatting should be based on currency or locale (or both, or any) 
+- decide if formatting should be based on currency or locale (or both, or any)
 - add optional debug callback
 - make it simpler to do operations with numbers eg money().add(50) instead of money().add({amount: 50, currency: 'EUR}) (is it obvious with ints / floats?)
 - fromNumber (float or int)
@@ -71,7 +72,6 @@ console.log(money.format(finalBalance)); // €138.269,60
 - build to js and make it work with Deno
 
 ### API
-
 
 #### Initialization:
 
@@ -82,9 +82,10 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  fromInt(4299, 'EUR') -> Money{amount: 4299, currency: "EUR"};
-  ```
+```js
+fromInt(4299, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+```
+
 </details>
 <br/>
 
@@ -93,11 +94,12 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
-  fromFloat(42.999, 'EUR') -> Money{amount: 4299, currency: "EUR"};
-  fromFloat(42.9, 'EUR') -> Money{amount: 4290, currency: "EUR"};
-  ``` 
+```js
+fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+fromFloat(42.999, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+fromFloat(42.9, 'EUR') -> Money{amount: 4290, currency: "EUR"};
+```
+
 </details>
 <br/>
 
@@ -156,30 +158,31 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  parse("€123.555,99") -> Money{amount: 12355599, currency: "EUR"};
+```js
+parse("€123.555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-  // default currency
-  parse("123.555,99") -> Money{amount: 12355599, currency: "EUR"};
+// default currency
+parse("123.555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-  // comma decimal separator
-  parse("€123555,99") -> Money{amount: 12355599, currency: "EUR"};
+// comma decimal separator
+parse("€123555,99") -> Money{amount: 12355599, currency: "EUR"};
 
-  // dot decimal separator
-  parse("€123555.99") -> Money{amount: 12355599, currency: "EUR"};
+// dot decimal separator
+parse("€123555.99") -> Money{amount: 12355599, currency: "EUR"};
 
-  // no fraction digits
-  parse("4299") -> Money{amount: 429900, currency: "EUR"};
+// no fraction digits
+parse("4299") -> Money{amount: 429900, currency: "EUR"};
 
-  // 1 fraction digit
-  parse("€123555.1") -> Money{amount: 12355510, currency: "EUR"};
+// 1 fraction digit
+parse("€123555.1") -> Money{amount: 12355510, currency: "EUR"};
 
-  // more than 2 fraction digits
-  parse("€123555.999") -> Money{amount: 12355599, currency: "EUR"};
+// more than 2 fraction digits
+parse("€123555.999") -> Money{amount: 12355599, currency: "EUR"};
 
-  // invalid input
-  parse("€123555.99") -> Money{amount: 0, currency: "EUR"};
-  ```
+// invalid input
+parse("€123555.99") -> Money{amount: 0, currency: "EUR"};
+```
+
 </details>
 <br/>
 
@@ -190,9 +193,10 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  format({amount: 12355599, currency: 'EUR'}) -> "€123.555,99"
-  ```
+```js
+format({amount: 12355599, currency: 'EUR'}) -> "€123.555,99"
+```
+
 </details>
 <br/>
 
@@ -201,15 +205,16 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  formatParts({amount: 12355599, currency: 'EUR'}) -> {
-    whole: '123555',
-    wholeFormatted: '123.555',
-    cents: '99',
-    currencySymbol: '€',
-    decimalSeparator: ',',
-  }
-  ```
+```js
+formatParts({amount: 12355599, currency: 'EUR'}) -> {
+  whole: '123555',
+  wholeFormatted: '123.555',
+  cents: '99',
+  currencySymbol: '€',
+  decimalSeparator: ',',
+}
+```
+
 </details>
 <br/>
 
@@ -220,9 +225,10 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```js
-  split({amount: 4599, currency: 'EUR'}) -> {whole: 45, fraction: 99}
-  ```
+```js
+split({amount: 4599, currency: 'EUR'}) -> {whole: 45, fraction: 99}
+```
+
 </details>
 <br/>
 
@@ -233,30 +239,31 @@ console.log(money.format(finalBalance)); // €138.269,60
 <details>
   <summary>Example</summary>
 
-  ```ts
-  type Config = {
-    defaultCurrency?: string;
-    currencies?: Array<{
-      code: "EUR";
-      symbol: "€";
-      decimalSeparator: "." | ",";
-    }>;
-  };
+```ts
+type Config = {
+  defaultCurrency?: string;
+  currencies?: Array<{
+    code: "EUR";
+    symbol: "€";
+    decimalSeparator: "." | ",";
+  }>;
+};
 
-  money.config({
-    defaultCurrency: "EUR",
-    currencies: [
-      {
-        code: "EUR",
-        symbol: "€",
-        decimalSeparator: ",",
-      },
-      {
-        code: "USD",
-        symbol: "$",
-        decimalSeparator: ".",
-      },
-    ],
-  });
-  ```
+money.config({
+  defaultCurrency: "EUR",
+  currencies: [
+    {
+      code: "EUR",
+      symbol: "€",
+      decimalSeparator: ",",
+    },
+    {
+      code: "USD",
+      symbol: "$",
+      decimalSeparator: ".",
+    },
+  ],
+});
+```
+
 </details>

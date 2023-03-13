@@ -1,11 +1,10 @@
 {
-  "name": "money",
+  "name": "money-lib",
   "version": "0.0.1",
-  "description": "Simple TypeScript package to work with money",
+  "description": "Simple TypeScript library to work with money",
   "main": "index.ts",
   "scripts": {
-    "test": "npm run test:node",
-    "test:node": "node --loader tsx --test ./test/node/*",
+    "test": "node --loader tsx --test ./test/*",
     "build": "tsc",
     "prepublish": "npm run build"
   },
@@ -14,16 +13,25 @@
     "url": "git+https://github.com/givehug/money.git"
   },
   "keywords": [
-    "money"
+    "javascript",
+    "money",
+    "typescript",
+    "parsing",
+    "formatting",
+    "currency",
+    "calculation",
+    "monetary",
+    "arithmetics"
   ],
   "author": "givehug",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/givehug/money/issues"
   },
   "homepage": "https://github.com/givehug/money#readme",
   "devDependencies": {
-    "tsx": "^3.12.1",
-    "@types/node": "^18.11.18"
+    "tsx": "3.12.1",
+    "@types/node": "18.11.18",
+    "typescript": "4.9.5"
   }
 }

@@ -1,6 +1,8 @@
-export type { Money } from "./money";
+export type { Money } from "./lib/money";
 
-export { default as money } from "./chain";
+import { default as money } from "./lib/chain";
+
+export default money;
 
 export {
   // Initialization
@@ -41,4 +43,4 @@ export {
 
   // Parsing
   parse,
-} from "./money";
+} from "./lib/money";

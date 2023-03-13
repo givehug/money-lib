@@ -1,6 +1,6 @@
-# WIP: TS-Money
+# money-lib
 
-### _Simple TypeScript library to work with money_ (cross-platform)
+### _Simple TypeScript library to work with money_
 
 ### Features
 
@@ -8,7 +8,7 @@
   (can be used in your app as you wish, eg in redux state)
 - Represents amount values as integers, in cents. This avoids floating point rounding errors.
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
-- Works everywhere (browsers, node, deno, react-native, etc)
+- Soon will work everywhere (browsers, node, deno, react-native, etc)
 - Inspired by [go-money](https://github.com/Rhymond/go-money) and [js-money](https://github.com/davidkalosi/js-money)
 
 ### _Money_ type
@@ -25,7 +25,7 @@ type Money = {
 **_chained_**:
 
 ```ts
-import { money, Money } from "money-lib";
+import money, { Money } from "money-lib";
 
 const m = money()
   .debug() // money: { amount: 0, currency: 'EUR' }

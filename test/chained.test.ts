@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { describe, test } from "node:test";
 
-import { money } from "../../index";
+import money from "../index";
 
 describe("chained", () => {
   describe("basic use cased", () => {

@@ -26,10 +26,50 @@ import {
 
 import type { Money } from "./money";
 
-type ChainedMoney = { toJSON: () => Money };
+type ChainedMoney = {
+  zero: () => ChainedMoney;
+  fromInt: (amount: number, currency?: string) => ChainedMoney;
+  fromFloat: (amount: number, currency?: string) => ChainedMoney;
+  toInt: () => number;
+  toFloat: () => number;
+  compare: (m: Money | ChainedMoney) => number;
+  equals: (m: Money | ChainedMoney) => boolean;
+  greaterThan: (m: Money | ChainedMoney) => boolean;
+  greaterThanOrEqual: (m: Money | ChainedMoney) => boolean;
+  lessThan: (m: Money | ChainedMoney) => boolean;
+  lessThanOrEqual: (m: Money | ChainedMoney) => boolean;
+  isZero: () => boolean;
+  isPositive: () => boolean;
+  isNegative: () => boolean;
+  isValid: () => boolean;
+  split: () => {
+    whole: number;
+    cents: number;
+  };
+  add: (m: Money | ChainedMoney) => ChainedMoney;
+  subtract: (m: Money | ChainedMoney) => ChainedMoney;
+  multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
+  divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
+  format: (locale?: string) => string;
+  formatParts: (locale?: string) => {
+    whole: string;
+    wholeFormatted: string;
+    cents: string;
+    currencySymbol: string;
+    decimalSeparator: string;
+  };
+  parse: (
+    s: string,
+    currency: string,
+    locale?: string,
+    decimalSeparator?: "." | ","
+  ) => ChainedMoney;
+  debug: (prefix?: string) => ChainedMoney;
+  toJSON: () => Money;
+};
 
 // Helper wrapper to allow chaining
-const moneyChain = (money: Money | ChainedMoney = zero()) => {
+const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   // unwrap Money from chain, or init with zero value
   const _m: Money = isValid(money) ? money : money.toJSON();
 
@@ -87,7 +127,12 @@ const moneyChain = (money: Money | ChainedMoney = zero()) => {
 
     formatParts: (locale?: string) => formatParts(_m, locale),
 
-    parse,
+    parse: (
+      s: string,
+      currency: string,
+      locale?: string,
+      decimalSeparator?: "." | ","
+    ) => moneyChain(parse(s, currency, locale, decimalSeparator)),
 
     debug: (prefix = "money:") => {
       console.log(prefix, _m);

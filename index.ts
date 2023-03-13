@@ -1,6 +1,8 @@
 export type { Money } from "./lib/money";
 
-export { default as money } from "./lib/chain";
+import { default as money } from "./lib/chain";
+
+export default money;
 
 export {
   // Initialization

@@ -1,21 +1,20 @@
 type Config = {
   currencies: Record<string, Currency>;
   defaultCurrency: string;
-  // locales: Record<string, Locale>;
-  defaultLocale?: string;
+  locales: Record<string, Locale>;
+  defaultLocale: string;
 };
 
 type Currency = {
   precision: number;
   code: string;
   symbol: string;
-  decimalSeparator: "." | ",";
 };
 
-// type Locale = {
-//   countryCode: string;
-//   decimalSeparator: "." | ",";
-// };
+type Locale = {
+  countryCode: string;
+  decimalSeparator: "." | ",";
+};
 
 export const config: Config = {
   defaultCurrency: "EUR",
@@ -25,32 +24,32 @@ export const config: Config = {
       code: "EUR",
       symbol: "€",
       precision: 2,
-      decimalSeparator: ",",
     },
     USD: {
       code: "USD",
       symbol: "$",
       precision: 2,
-      decimalSeparator: ".",
     },
   },
-  // locales: {
-  //   IE: {
-  //     countryCode: "IE",
-  //     decimalSeparator: ",",
-  //   },
-  //   NL: {
-  //     countryCode: "NL",
-  //     decimalSeparator: ".",
-  //   },
-  // },
+  locales: {
+    IE: {
+      countryCode: "IE",
+      decimalSeparator: ".",
+    },
+    NL: {
+      countryCode: "NL",
+      decimalSeparator: ",",
+    },
+  },
 };
 
-// export const getLocale = (locale = config.defaultLocale) =>
-//   config.locales[locale];
+export const getLocale = (locale = config.defaultLocale) => ({
+  ...config.locales[locale],
+});
 
-export const getCurrency = (currency = config.defaultCurrency) =>
-  config.currencies[currency];
+export const getCurrency = (currency = config.defaultCurrency) => ({
+  ...config.currencies[currency],
+});
 
 const validate = (c: Config): void => {
   if (!c) {

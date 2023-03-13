@@ -1,13 +1,26 @@
 import {
+  zero,
   fromInt,
-  format,
+  fromFloat,
+  toInt,
+  toFloat,
   add,
   subtract,
   multiply,
   divide,
+  compare,
+  equals,
+  greaterThan,
+  greaterThanOrEqual,
+  lessThan,
+  lessThanOrEqual,
+  isZero,
+  isPositive,
+  isNegative,
   isValid,
-  fromFloat,
-  zero,
+  split,
+  format,
+  formatParts,
   parse,
 } from "./money";
 
@@ -21,11 +34,42 @@ const moneyChain = (money: Money | ChainedMoney = zero()) => {
   const _m: Money = isValid(money) ? money : money.toJSON();
 
   return {
+    zero: () => moneyChain(zero()),
+
     fromInt: (amount: number, currency?: string) =>
       moneyChain(fromInt(amount, currency)),
 
     fromFloat: (amount: number, currency?: string) =>
       moneyChain(fromFloat(amount, currency)),
+
+    toInt: () => toInt(_m),
+
+    toFloat: () => toFloat(_m),
+
+    compare: (m: Money | ChainedMoney) => compare(_m, moneyChain(m).toJSON()),
+
+    equals: (m: Money | ChainedMoney) => equals(_m, moneyChain(m).toJSON()),
+
+    greaterThan: (m: Money | ChainedMoney) =>
+      greaterThan(_m, moneyChain(m).toJSON()),
+
+    greaterThanOrEqual: (m: Money | ChainedMoney) =>
+      greaterThanOrEqual(_m, moneyChain(m).toJSON()),
+
+    lessThan: (m: Money | ChainedMoney) => lessThan(_m, moneyChain(m).toJSON()),
+
+    lessThanOrEqual: (m: Money | ChainedMoney) =>
+      lessThanOrEqual(_m, moneyChain(m).toJSON()),
+
+    isZero: () => isZero(_m),
+
+    isPositive: () => isPositive(_m),
+
+    isNegative: () => isNegative(_m),
+
+    isValid: () => isValid(_m),
+
+    split: () => split(_m),
 
     add: (m: Money | ChainedMoney) =>
       moneyChain(add(_m, moneyChain(m).toJSON())),
@@ -40,6 +84,8 @@ const moneyChain = (money: Money | ChainedMoney = zero()) => {
       moneyChain(divide(_m, divider, round)),
 
     format: (locale?: string) => format(_m, locale),
+
+    formatParts: (locale?: string) => formatParts(_m, locale),
 
     parse,
 

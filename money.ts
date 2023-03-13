@@ -1,8 +1,4 @@
-import {
-  config,
-  getCurrency,
-  //  getLocale
-} from "./config";
+import { config, getCurrency, getLocale } from "./config";
 
 export type Money = {
   amount: number; // Integer representing cents
@@ -28,6 +24,7 @@ export const fromFloat = (
   round = Math.round
 ): Money => {
   const scale = getCurrencyScale(zero(currency));
+
   return {
     amount: round(amount * scale),
     currency,
@@ -43,6 +40,7 @@ export const toInt = (m: Money): number => {
 export const toFloat = (m: Money): number => {
   const scale = getCurrencyScale(m);
   const { whole, cents } = split(m);
+
   return whole + cents / scale;
 };
 
@@ -116,7 +114,6 @@ export const isNegative = (m: Money): boolean => {
 // ------ Validation ------ //
 
 export const isValid = (m: any): m is Money => {
-  // TODO: check m.amount boundaries
   return Boolean(
     typeof m === "object" &&
       (m.amount || m.amount === 0) &&
@@ -131,6 +128,7 @@ export const split = (m: Money): { whole: number; cents: number } => {
   const scale = getCurrencyScale(m);
   const whole = Math.trunc(m.amount / scale);
   const cents = m.amount - whole * scale;
+
   return { whole, cents };
 };
 
@@ -138,12 +136,13 @@ export const split = (m: Money): { whole: number; cents: number } => {
 
 export const format = (m: Money, locale = config.defaultLocale): string => {
   const parts = formatParts(m, locale);
+
   return `${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
 };
 
 export const formatParts = (
   m: Money,
-  locale = config.defaultLocale // TODO: should formatting be based on currency or locale?
+  locale = config.defaultLocale
 ): {
   whole: string;
   wholeFormatted: string;
@@ -152,17 +151,11 @@ export const formatParts = (
   decimalSeparator: string;
 } => {
   const { symbol, precision } = getCurrency(m.currency);
-  //   const { decimalSeparator } = getLocale(locale);
-  const decimalSeparator = new Intl.NumberFormat(locale).format(0.1).charAt(1);
+  const { decimalSeparator } = getLocale(locale);
   const { whole, cents } = split(m);
-  const scale = getCurrencyScale(m);
+
   return {
     whole: `${whole}`,
-    // wholeFormatted: `${whole}`.replace(
-    //   /\B(?=(\d{3})+(?!\d))/g,
-    //   decimalSeparator === "." ? "," : "."
-    // ),
-    // TODO: what about ReactNAtive?
     wholeFormatted: new Intl.NumberFormat(locale).format(whole),
     cents: `${cents}`.padEnd(precision, "0"),
     currencySymbol: symbol,
@@ -175,8 +168,11 @@ export const formatParts = (
 export const parse = (
   s: string,
   currency: string,
-  decimalSeparator = getCurrency(currency).decimalSeparator
+  locale = config.defaultLocale,
+  decimalSeparator?: "." | ","
 ): Money => {
+  const _decimalSeparator =
+    decimalSeparator ?? getLocale(locale).decimalSeparator;
   const amountFloatString = {
     ",": () =>
       s
@@ -184,8 +180,9 @@ export const parse = (
         .replace(/\./g, "")
         .replace(/\,/g, "."),
     ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
-  }[decimalSeparator]();
+  }[_decimalSeparator]();
   const amountFloat = parseFloat(amountFloatString);
+
   return fromFloat(amountFloat, currency);
 };
 

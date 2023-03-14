@@ -157,7 +157,7 @@ export const formatParts = (
   return {
     whole: `${whole}`,
     wholeFormatted: new Intl.NumberFormat(locale).format(whole),
-    cents: `${cents}`.padEnd(precision, "0"),
+    cents: `${Math.abs(cents)}`.padEnd(precision, "0"),
     currencySymbol: symbol,
     decimalSeparator,
   };

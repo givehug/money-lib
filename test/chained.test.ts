@@ -238,6 +238,13 @@ describe("chained", () => {
       );
     });
 
+    test("format negative amount", () => {
+      assert.deepEqual(
+        money({ currency: "EUR", amount: -100042 }).format(),
+        "€-1.000,42"
+      );
+    });
+
     test("formatParts", () => {
       assert.deepEqual(
         money({ currency: "EUR", amount: 100042 }).formatParts(),

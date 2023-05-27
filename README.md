@@ -1,4 +1,4 @@
-# money-lib
+# 💰 money-lib 💰
 
 ### _Simple TypeScript library to work with money_
 
@@ -65,7 +65,7 @@ console.log(money.format(finalBalance)); // €138.269,60
 
 #### Initialization:
 
-**`zero = (currency = config.defaultCurrency) => Money`**
+**`zero: (currency = config.defaultCurrency) => Money`**
 
 **`fromInt: (amount: number, currency?: string) => Money`**
 

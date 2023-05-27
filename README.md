@@ -2,6 +2,8 @@
 
 ### _Simple TypeScript library to work with money_
 
+[![NPM Version](https://img.shields.io/npm/v/money-lib)](https://www.npmjs.com/package/money-lib)
+
 ### Features
 
 - Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code

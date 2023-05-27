@@ -298,4 +298,8 @@ describe("chained", () => {
       );
     });
   });
+
+  describe("isMoneyChain", () => {
+    assert.equal(money().isMoneyChain(), false);
+  });
 });

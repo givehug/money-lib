@@ -26,6 +26,8 @@ import {
 
 import type { Money } from "./money";
 
+const chainIdentifier = Symbol("moneyChain");
+
 type ChainedMoney = {
   zero: () => ChainedMoney;
   fromInt: (amount: number, currency?: string) => ChainedMoney;
@@ -66,6 +68,8 @@ type ChainedMoney = {
   ) => ChainedMoney;
   debug: (prefix?: string) => ChainedMoney;
   toJSON: () => Money;
+  isMoneyChain: () => boolean;
+  [chainIdentifier]: boolean;
 };
 
 // Helper wrapper to allow chaining
@@ -73,7 +77,9 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   // unwrap Money from chain, or init with zero value
   const _m: Money = isValid(money) ? money : money.toJSON();
 
-  return {
+  const chain = {
+    [chainIdentifier]: true,
+
     zero: () => moneyChain(zero()),
 
     fromInt: (amount: number, currency?: string) =>
@@ -140,7 +146,12 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     },
 
     toJSON: () => _m,
+
+    isMoneyChain: () =>
+      typeof chain === "object" && chain.hasOwnProperty(chainIdentifier),
   };
+
+  return chain;
 };
 
 export default moneyChain;

@@ -57,6 +57,16 @@ describe("chained", () => {
     });
   });
 
+  describe("floatToInt intToFloat", () => {
+    test("floatToInt", () => {
+      assert.equal(money().fromFloat(100.42).toInt(), 10042);
+    });
+
+    test("intToFloat", () => {
+      assert.equal(money().fromInt(10042).toFloat(), 100.42);
+    });
+  });
+
   describe("arithmetics", () => {
     test("add", () => {
       assert.deepEqual(

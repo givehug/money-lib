@@ -15,6 +15,17 @@ describe("chained", () => {
 
       assert.strictEqual(m, "€42,00");
     });
+
+    test("should do arithm and format money with default currency", () => {
+      const m = money()
+        .add({ amount: 4499 })
+        .subtract({ amount: 299 })
+        .multiply(5.56399)
+        .divide(5.56399)
+        .format();
+
+      assert.strictEqual(m, "€42,00");
+    });
   });
 
   describe("initialization", () => {

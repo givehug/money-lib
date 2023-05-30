@@ -253,6 +253,12 @@ describe("chained", () => {
 
   describe("formatting", () => {
     test("format", () => {
+      assert.deepEqual(money({ currency: "EUR", amount: 0 }).format(), "€0,00");
+      assert.deepEqual(money({ currency: "EUR", amount: 5 }).format(), "€0,05");
+      assert.deepEqual(
+        money({ currency: "EUR", amount: 50 }).format(),
+        "€0,50"
+      );
       assert.deepEqual(
         money({ currency: "EUR", amount: 100042 }).format(),
         "€1.000,42"
@@ -284,7 +290,7 @@ describe("chained", () => {
       );
     });
 
-    test("formatParts", () => {
+    test("fr", () => {
       assert.deepEqual(
         money({ currency: "EUR", amount: 100055542 }).formatParts(),
         {

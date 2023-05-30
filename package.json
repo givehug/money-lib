@@ -1,6 +1,6 @@
 {
   "name": "money-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple TypeScript library to work with money",
   "main": "dist/index.js",
   "scripts": {

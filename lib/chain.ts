@@ -50,7 +50,7 @@ type ChainedMoney = {
   subtract: (m: Money | ChainedMoney) => ChainedMoney;
   multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
-  format: (locale?: string) => string;
+  format: (ops?: { cents?: boolean; locale?: string }) => string;
   formatParts: (locale?: string) => {
     whole: string;
     wholeFormatted: string;
@@ -123,7 +123,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     divide: (divider: number, round = Math.round) =>
       moneyChain(divide(_m, divider, round)),
 
-    format: (locale?: string) => format(_m, locale),
+    format: (ops?: { cents?: boolean; locale?: string }) => format(_m, ops),
 
     formatParts: (locale?: string) => formatParts(_m, locale),
 

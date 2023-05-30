@@ -134,16 +134,27 @@ export const split = (m: Money): { whole: number; cents: number } => {
 
 // ------ Formatting ------ //
 
-export const format = (m: Money, locale = config.defaultLocale): string => {
+export const format = (
+  m: Money,
+  ops?: {
+    cents?: boolean; // if false, 00 cents will be omitted
+    locale?: string;
+  }
+): string => {
+  const { cents, locale } = {
+    cents: ops?.cents ?? true,
+    locale: ops?.locale ?? config.defaultLocale,
+  };
   const parts = formatParts(m, locale);
   const signSymbol = parts.sign === "-" ? "-" : "";
+
+  if (!cents && parts.cents === "00") {
+    return `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
+  }
 
   return `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
 };
 
-/**
- * Format integer part without leading zeros for negative amounts
- */
 export const formatIntegerPart = (
   integerPart: number,
   locale = config.defaultLocale,
@@ -151,17 +162,13 @@ export const formatIntegerPart = (
 ) => {
   const { decimalSeparator } = getLocale(locale);
 
-  const formattedIntegerPart =
-    platform === "react-native"
-      ? integerPart
-          .toFixed(0)
-          .replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            decimalSeparator === "," ? "." : ","
-          )
-      : new Intl.NumberFormat(locale).format(integerPart);
+  if (platform === "react-native") {
+    return integerPart
+      .toFixed(0)
+      .replace(/\B(?=(\d{3})+(?!\d))/g, decimalSeparator === "," ? "." : ",");
+  }
 
-  return formattedIntegerPart.replace(/^-/, "");
+  return new Intl.NumberFormat(locale).format(integerPart);
 };
 
 export const formatParts = (
@@ -178,11 +185,12 @@ export const formatParts = (
   const { symbol, precision } = getCurrency(m.currency);
   const { decimalSeparator } = getLocale(locale);
   const { whole, cents } = split(m);
-  const wholeFormatted = formatIntegerPart(whole, locale);
+  const absWhole = Math.abs(whole);
+  const wholeFormatted = formatIntegerPart(absWhole, locale);
   const sign = getAmountSign(m);
 
   return {
-    whole: `${whole}`,
+    whole: `${absWhole}`,
     wholeFormatted,
     cents: `${Math.abs(cents)}`.padEnd(precision, "0"),
     currencySymbol: symbol,
@@ -210,7 +218,7 @@ export const parse = (
     ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
   }[_decimalSeparator]();
   const parsedFloat = parseFloat(amountFloatString);
-  const amountFloat = isNaN(parsedFloat) ? 0 : parsedFloat;
+  const amountFloat = Number.isNaN(parsedFloat) ? 0 : parsedFloat;
 
   return fromFloat(amountFloat, currency);
 };

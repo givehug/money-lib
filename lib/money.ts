@@ -2,7 +2,7 @@ import { config, getCurrency, getLocale } from "./config";
 
 export type Money = {
   amount: number; // Integer representing cents
-  currency: string; // Currency code (ISO 4217)
+  currency?: string; // Currency code (ISO 4217)
 };
 
 // ------ Initialization ------ //
@@ -117,8 +117,10 @@ export const isValid = (m: any): m is Money => {
   return Boolean(
     typeof m === "object" &&
       (m.amount || m.amount === 0) &&
-      typeof m.currency === "string" &&
-      m.currency.length > 0
+      (typeof m.currency === "undefined" ||
+        (typeof m.currency === "string" &&
+          m.currency.length > 0 &&
+          !!getCurrency(m.currency)))
   );
 };
 

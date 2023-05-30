@@ -1,12 +1,13 @@
 {
   "name": "money-lib",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Simple TypeScript library to work with money",
   "main": "dist/index.js",
   "scripts": {
     "test": "node --loader tsx --test ./test/*",
     "build": "tsc",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "release": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",

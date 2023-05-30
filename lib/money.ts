@@ -136,23 +136,32 @@ export const split = (m: Money): { whole: number; cents: number } => {
 
 export const format = (m: Money, locale = config.defaultLocale): string => {
   const parts = formatParts(m, locale);
+  const signSymbol = parts.sign === "-" ? "-" : "";
 
-  return `${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
+  return `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
 };
 
-const formatIntegerPart = (
+/**
+ * Format integer part without leading zeros for negative amounts
+ */
+export const formatIntegerPart = (
   integerPart: number,
-  locale = config.defaultLocale
+  locale = config.defaultLocale,
+  platform = detectPlatform()
 ) => {
   const { decimalSeparator } = getLocale(locale);
 
-  if (detectPlatform() === "react-native") {
-    return integerPart
-      .toFixed(0)
-      .replace(/\B(?=(\d{3})+(?!\d))/g, decimalSeparator === "," ? "." : ",");
-  }
+  const formattedIntegerPart =
+    platform === "react-native"
+      ? integerPart
+          .toFixed(0)
+          .replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            decimalSeparator === "," ? "." : ","
+          )
+      : new Intl.NumberFormat(locale).format(integerPart);
 
-  return new Intl.NumberFormat(locale).format(integerPart);
+  return formattedIntegerPart.replace(/^-/, "");
 };
 
 export const formatParts = (
@@ -164,17 +173,21 @@ export const formatParts = (
   cents: string;
   currencySymbol: string;
   decimalSeparator: string;
+  sign: "+" | "-" | "";
 } => {
   const { symbol, precision } = getCurrency(m.currency);
   const { decimalSeparator } = getLocale(locale);
   const { whole, cents } = split(m);
+  const wholeFormatted = formatIntegerPart(whole, locale);
+  const sign = getAmountSign(m);
 
   return {
     whole: `${whole}`,
-    wholeFormatted: formatIntegerPart(whole),
+    wholeFormatted,
     cents: `${Math.abs(cents)}`.padEnd(precision, "0"),
     currencySymbol: symbol,
     decimalSeparator,
+    sign,
   };
 };
 
@@ -196,7 +209,8 @@ export const parse = (
         .replace(/\,/g, "."),
     ".": () => s.replace(/[^0-9.,]/g, "").replace(/\,/g, ""),
   }[_decimalSeparator]();
-  const amountFloat = parseFloat(amountFloatString);
+  const parsedFloat = parseFloat(amountFloatString);
+  const amountFloat = isNaN(parsedFloat) ? 0 : parsedFloat;
 
   return fromFloat(amountFloat, currency);
 };
@@ -220,4 +234,14 @@ const detectPlatform = (): "browser" | "react-native" | "node" => {
   }
 
   return "node";
+};
+
+const getAmountSign = (m: Money) => {
+  if (m.amount > 0) {
+    return "+";
+  }
+  if (m.amount < 0) {
+    return "-";
+  }
+  return "";
 };

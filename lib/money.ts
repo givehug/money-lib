@@ -194,7 +194,7 @@ export const formatParts = (
   return {
     whole: `${absWhole}`,
     wholeFormatted,
-    cents: `${Math.abs(cents)}`.padEnd(precision, "0"),
+    cents: `${Math.abs(cents)}`.padStart(precision, "0"),
     currencySymbol: symbol,
     decimalSeparator,
     sign,

@@ -140,6 +140,21 @@ export const format = (m: Money, locale = config.defaultLocale): string => {
   return `${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
 };
 
+const formatIntegerPart = (
+  integerPart: number,
+  locale = config.defaultLocale
+) => {
+  const { decimalSeparator } = getLocale(locale);
+
+  if (detectPlatform() === "react-native") {
+    return integerPart
+      .toFixed(0)
+      .replace(/\B(?=(\d{3})+(?!\d))/g, decimalSeparator === "," ? "." : ",");
+  }
+
+  return new Intl.NumberFormat(locale).format(integerPart);
+};
+
 export const formatParts = (
   m: Money,
   locale = config.defaultLocale
@@ -156,7 +171,7 @@ export const formatParts = (
 
   return {
     whole: `${whole}`,
-    wholeFormatted: new Intl.NumberFormat(locale).format(whole),
+    wholeFormatted: formatIntegerPart(whole),
     cents: `${Math.abs(cents)}`.padEnd(precision, "0"),
     currencySymbol: symbol,
     decimalSeparator,
@@ -190,4 +205,19 @@ export const parse = (
 
 const getCurrencyScale = (m: Money): number => {
   return 10 ** getCurrency(m.currency).precision;
+};
+
+const detectPlatform = (): "browser" | "react-native" | "node" => {
+  if (typeof document !== "undefined") {
+    return "browser";
+  }
+
+  if (
+    (typeof navigator !== "undefined" && navigator.product === "ReactNative") ||
+    (typeof global !== "undefined" && "__reactNativeVersion__" in global)
+  ) {
+    return "react-native";
+  }
+
+  return "node";
 };

@@ -247,13 +247,13 @@ describe("chained", () => {
 
     test("formatParts", () => {
       assert.deepEqual(
-        money({ currency: "EUR", amount: 100042 }).formatParts(),
+        money({ currency: "EUR", amount: 100055542 }).formatParts(),
         {
           cents: "42",
           currencySymbol: "€",
           decimalSeparator: ",",
-          whole: "1000",
-          wholeFormatted: "1.000",
+          whole: "1000555",
+          wholeFormatted: "1.000.555",
         }
       );
     });

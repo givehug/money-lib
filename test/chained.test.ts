@@ -253,34 +253,50 @@ describe("chained", () => {
 
   describe("formatting", () => {
     test("format", () => {
-      assert.deepEqual(money({ currency: "EUR", amount: 0 }).format(), "€0,00");
-      assert.deepEqual(money({ currency: "EUR", amount: 5 }).format(), "€0,05");
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 50 }).format(),
-        "€0,50"
-      );
-      assert.deepEqual(
+      assert.equal(money({ currency: "EUR", amount: 0 }).format(), "€0,00");
+      assert.equal(money({ currency: "EUR", amount: 5 }).format(), "€0,05");
+      assert.equal(money({ currency: "EUR", amount: 50 }).format(), "€0,50");
+      assert.equal(
         money({ currency: "EUR", amount: 100042 }).format(),
         "€1.000,42"
       );
-      assert.deepEqual(
+      assert.equal(
         money({ currency: "EUR", amount: 100042 }).format({
           cents: false,
         }),
         "€1.000,42"
       );
-      assert.deepEqual(
+      assert.equal(
         money({ currency: "EUR", amount: 100000 }).format({
           cents: false,
         }),
         "€1.000"
       );
-      assert.deepEqual(
+      assert.equal(
+        money({ currency: "EUR", amount: 50 }).format({
+          cents: false,
+        }),
+        "€0,50"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: 0 }).format({
+          cents: false,
+        }),
+        "€0"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: 0 }).format({
+          cents: true,
+        }),
+        "€0,00"
+      );
+      assert.equal(
         money({ currency: "EUR", amount: 100042 }).format({
           locale: "IE",
         }),
         "€1,000.42"
       );
+      assert.equal(money().fromFloat(0.01).format(), "€0,01");
     });
 
     test("format negative amount", () => {

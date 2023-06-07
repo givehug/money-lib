@@ -2,6 +2,8 @@ import {
   zero,
   fromInt,
   fromFloat,
+  fromFloatString,
+  fromIntString,
   toInt,
   toFloat,
   add,
@@ -30,6 +32,16 @@ type ChainedMoney = {
   zero: () => ChainedMoney;
   fromInt: (amount: number, currency?: string) => ChainedMoney;
   fromFloat: (amount: number, currency?: string) => ChainedMoney;
+
+  /**
+   * Parse money represented as a int string in cents, eg "150" (150 cents)
+   */
+  fromIntString: (amount: string, currency?: string) => ChainedMoney;
+
+  /**
+   * Parse money represented as a float string, eg "100.45" (100 euros and 45 cents)
+   */
+  fromFloatString: (amount: string, currency?: string) => ChainedMoney;
   toInt: () => number;
   toFloat: () => number;
   compare: (m: Money | ChainedMoney) => number;
@@ -81,6 +93,12 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
     fromFloat: (amount: number, currency?: string) =>
       moneyChain(fromFloat(amount, currency)),
+
+    fromIntString: (amount: string, currency?: string) =>
+      moneyChain(fromIntString(amount, currency)),
+
+    fromFloatString: (amount: string, currency?: string) =>
+      moneyChain(fromFloatString(amount, currency)),
 
     toInt: () => toInt(_m),
 

@@ -31,6 +31,23 @@ export const fromFloat = (
   };
 };
 
+export const fromIntString = (
+  amount: string,
+  currency = config.defaultCurrency
+): Money => {
+  const parsed = parseInt(amount, 10);
+  return fromInt(Number.isNaN(parsed) ? 0 : parsed, currency);
+};
+
+export const fromFloatString = (
+  amount: string,
+  currency = config.defaultCurrency,
+  round = Math.round
+): Money => {
+  const parsed = parseFloat(amount);
+  return fromFloat(Number.isNaN(parsed) ? 0 : parsed, currency, round);
+};
+
 // ------ Serialization ------ //
 
 export const toInt = (m: Money): number => {

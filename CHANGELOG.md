@@ -12,3 +12,9 @@
 #### Fix
 
 - formatting values of less than 10 cents
+
+## v1.3.0 (2023-06-07)
+
+#### Feature
+
+- added `fromIntString`, `fromFloatString` methods

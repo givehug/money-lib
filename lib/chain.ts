@@ -29,8 +29,24 @@ import {
 import type { Money } from "./money";
 
 type ChainedMoney = {
+  // --- Initialization ---
+
+  /**
+   * Init money with zero value
+   * @example zero() -> Money{amount: 0, currency: "EUR"};
+   */
   zero: () => ChainedMoney;
+
+  /**
+   * Init money from a int number (cents), eg 42 (42 cents)
+   * @example fromInt(42, 'EUR') -> Money{amount: 42, currency: "EUR"};
+   */
   fromInt: (amount: number, currency?: string) => ChainedMoney;
+
+  /**
+   * Init money from a float number (euros.cents), eg 42.99 (42 euros and 99 cents)
+   * @example fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+   */
   fromFloat: (amount: number, currency?: string) => ChainedMoney;
 
   /**
@@ -42,8 +58,13 @@ type ChainedMoney = {
    * Parse money represented as a float string, eg "100.45" (100 euros and 45 cents)
    */
   fromFloatString: (amount: string, currency?: string) => ChainedMoney;
+
+  // --- Conversion to number ---
+
   toInt: () => number;
   toFloat: () => number;
+
+  // --- Comparison ---
   compare: (m: Money | ChainedMoney) => number;
   equals: (m: Money | ChainedMoney) => boolean;
   greaterThan: (m: Money | ChainedMoney) => boolean;
@@ -53,15 +74,23 @@ type ChainedMoney = {
   isZero: () => boolean;
   isPositive: () => boolean;
   isNegative: () => boolean;
+
+  // --- Validation ---
   isValid: () => boolean;
+
+  // --- Transformation ---
   split: () => {
     whole: number;
     cents: number;
   };
+
+  // --- Arithmetic ---
   add: (m: Money | ChainedMoney) => ChainedMoney;
   subtract: (m: Money | ChainedMoney) => ChainedMoney;
   multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
+
+  // --- Formatting ---
   format: (ops?: { cents?: boolean; locale?: string }) => string;
   formatParts: (locale?: string) => {
     whole: string;
@@ -70,13 +99,19 @@ type ChainedMoney = {
     currencySymbol: string;
     decimalSeparator: string;
   };
+
+  // --- Parsing ---
   parse: (
     s: string,
     currency: string,
     locale?: string,
     decimalSeparator?: "." | ","
   ) => ChainedMoney;
+
+  // --- Debug ---
   debug: (prefix?: string) => ChainedMoney;
+
+  // --- Serialization ---
   toJSON: () => Money;
 };
 

@@ -10,7 +10,7 @@
   (can be used in your app as you wish, eg in redux state)
 - Represents amount values as integers, in cents. This avoids floating point rounding errors.
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
-- Soon will work everywhere (browsers, node, deno, react-native, etc)
+- Works in browsers, node, react native (soon Deno, maybe already works)
 - Inspired by [go-money](https://github.com/Rhymond/go-money) and [js-money](https://github.com/davidkalosi/js-money)
 
 ### _Money_ type
@@ -46,7 +46,8 @@ const m2: Money = m.toJSON();
 console.log(m2); // { amount: 4200, currency: 'EUR' }
 ```
 
-**_standalone functions_**:
+<details>
+  <summary>or as standalone functions</summary>
 
 ```ts
 import * as money from "money-lib";
@@ -63,16 +64,104 @@ const finalBalance = money.add(
 console.log(money.format(finalBalance)); // €138.269,60
 ```
 
+</details>
+<br/>
+
 ### API
 
-#### Initialization:
+```ts
+type ChainedMoney = {
+  // --- Initialization ---
 
-**`zero: (currency = config.defaultCurrency) => Money`**
+  /**
+   * Init money with zero value
+   * @example zero() -> Money{amount: 0, currency: "EUR"};
+   */
+  zero: () => ChainedMoney;
 
-**`fromInt: (amount: number, currency?: string) => Money`**
+  /**
+   * Init money from a int number (cents), eg 42 (42 cents)
+   * @example fromInt(42, 'EUR') -> Money{amount: 42, currency: "EUR"};
+   */
+  fromInt: (amount: number, currency?: string) => ChainedMoney;
+
+  /**
+   * Init money from a float number (euros.cents), eg 42.99 (42 euros and 99 cents)
+   * @example fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
+   */
+  fromFloat: (amount: number, currency?: string) => ChainedMoney;
+
+  /**
+   * Parse money represented as a int string in cents, eg "150" (150 cents)
+   */
+  fromIntString: (amount: string, currency?: string) => ChainedMoney;
+
+  /**
+   * Parse money represented as a float string, eg "100.45" (100 euros and 45 cents)
+   */
+  fromFloatString: (amount: string, currency?: string) => ChainedMoney;
+
+  // --- Conversion to number ---
+
+  toInt: () => number;
+  toFloat: () => number;
+
+  // --- Comparison ---
+  compare: (m: Money | ChainedMoney) => number;
+  equals: (m: Money | ChainedMoney) => boolean;
+  greaterThan: (m: Money | ChainedMoney) => boolean;
+  greaterThanOrEqual: (m: Money | ChainedMoney) => boolean;
+  lessThan: (m: Money | ChainedMoney) => boolean;
+  lessThanOrEqual: (m: Money | ChainedMoney) => boolean;
+  isZero: () => boolean;
+  isPositive: () => boolean;
+  isNegative: () => boolean;
+
+  // --- Validation ---
+  isValid: () => boolean;
+
+  // --- Transformation ---
+  split: () => {
+    whole: number;
+    cents: number;
+  };
+
+  // --- Arithmetic ---
+  add: (m: Money | ChainedMoney) => ChainedMoney;
+  subtract: (m: Money | ChainedMoney) => ChainedMoney;
+  multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
+  divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
+
+  // --- Formatting ---
+  format: (ops?: { cents?: boolean; locale?: string }) => string;
+  formatParts: (locale?: string) => {
+    whole: string;
+    wholeFormatted: string;
+    cents: string;
+    currencySymbol: string;
+    decimalSeparator: string;
+  };
+
+  // --- Parsing ---
+  parse: (
+    s: string,
+    currency: string,
+    locale?: string,
+    decimalSeparator?: "." | ","
+  ) => ChainedMoney;
+
+  // --- Debug ---
+  debug: (prefix?: string) => ChainedMoney;
+
+  // --- Serialization ---
+  toJSON: () => Money;
+};
+```
+
+#### Examples:
 
 <details>
-  <summary>Example</summary>
+  <summary>fromInt</summary>
 
 ```js
 fromInt(4299, 'EUR') -> Money{amount: 4299, currency: "EUR"};
@@ -81,10 +170,8 @@ fromInt(4299, 'EUR') -> Money{amount: 4299, currency: "EUR"};
 </details>
 <br/>
 
-**`fromFloat: (amount: number, currency?: string) => Money`**
-
 <details>
-  <summary>Example</summary>
+  <summary>fromFloat</summary>
 
 ```js
 fromFloat(42.99, 'EUR') -> Money{amount: 4299, currency: "EUR"};
@@ -95,60 +182,8 @@ fromFloat(42.9, 'EUR') -> Money{amount: 4290, currency: "EUR"};
 </details>
 <br/>
 
-#### Conversion to number:
-
-**`toInt: (m: Money) => number`**
-
-**`toFloat: (m: Money) => number`**
-
-<br/>
-
-#### Arithmetics:
-
-**`add: (a: Money, b: Money) => Money`**
-
-**`subtract: (a: Money, b: Money) => Money`**
-
-**`multiply: (m: Money, multiplier: number) => Money`**
-
-**`divide: (m: Money, divider: number) => Money`**
-
-<br/>
-
-#### Comparison:
-
-**`compare: (a: Money, b: Money) => -1 | 0 | 1`**
-
-**`equals: (a: Money, b: Money) => boolean`**
-
-**`greaterThan: (a: Money, b: Money) => boolean`**
-
-**`greaterThanOrEqual: (a: Money, b: Money) => boolean`**
-
-**`lessThan: (a: Money, b: Money) => boolean`**
-
-**`lessThanOrEqual: (a: Money, b: Money) => boolean`**
-
-**`isZero: (m: Money) => boolean`**
-
-**`isPositive: (m: Money) => boolean`**
-
-**`isNegative: (m: Money) => boolean`**
-
-<br/>
-
-#### Validation:
-
-**`isValid: (m: Money) => m is Money`**
-
-<br/>
-
-#### Parsing:
-
-**`parse: (s: string) => Money`**
-
 <details>
-  <summary>Example</summary>
+  <summary>parse</summary>
 
 ```js
 parse("€123.555,99") -> Money{amount: 12355599, currency: "EUR"};
@@ -178,12 +213,8 @@ parse("€123555.99") -> Money{amount: 0, currency: "EUR"};
 </details>
 <br/>
 
-#### Formatting:
-
-**`format: (m: Money) => string`**
-
 <details>
-  <summary>Example</summary>
+  <summary>format</summary>
 
 ```js
 format({amount: 12355599, currency: 'EUR'}) -> "€123.555,99"
@@ -192,10 +223,8 @@ format({amount: 12355599, currency: 'EUR'}) -> "€123.555,99"
 </details>
 <br/>
 
-**`formatParts: (m: Money) => FormattedParts`**
-
 <details>
-  <summary>Example</summary>
+  <summary>formatParts</summary>
 
 ```js
 formatParts({amount: 12355599, currency: 'EUR'}) -> {
@@ -210,12 +239,8 @@ formatParts({amount: 12355599, currency: 'EUR'}) -> {
 </details>
 <br/>
 
-#### Transformation:
-
-**`split: (m: Money) => { whole: number, fraction: number }`**
-
 <details>
-  <summary>Example</summary>
+  <summary>split</summary>
 
 ```js
 split({amount: 4599, currency: 'EUR'}) -> {whole: 45, fraction: 99}
@@ -224,12 +249,8 @@ split({amount: 4599, currency: 'EUR'}) -> {whole: 45, fraction: 99}
 </details>
 <br/>
 
-#### Setup config and currencies:
-
-**`config: (c: Config) => void`**
-
 <details>
-  <summary>Example</summary>
+  <summary>config</summary>
 
 ```ts
 type Config = {
@@ -259,7 +280,3 @@ money.config({
 ```
 
 </details>
-
-### TODO:
-
-- Deno support ?

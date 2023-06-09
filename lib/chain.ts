@@ -98,6 +98,7 @@ type ChainedMoney = {
     cents: string;
     currencySymbol: string;
     decimalSeparator: string;
+    sign: "+" | "-" | "";
   };
 
   // --- Parsing ---

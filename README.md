@@ -9,6 +9,7 @@
 - Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code
   (can be used in your app as you wish, eg in redux state)
 - Represents amount values as integers, in cents. This avoids floating point rounding errors.
+- Zero dependencies
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
 - Works in browsers, node, react native (soon Deno, maybe already works)
 - Inspired by [go-money](https://github.com/Rhymond/go-money) and [js-money](https://github.com/davidkalosi/js-money)

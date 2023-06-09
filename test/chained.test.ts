@@ -100,6 +100,13 @@ describe("chained", () => {
         currency: "EUR",
         amount: 0,
       });
+      assert.deepEqual(
+        money().fromFloatString("216.6666666666666667").toJSON(),
+        {
+          currency: "EUR",
+          amount: 21667,
+        }
+      );
     });
 
     test("fromIntString", () => {

@@ -1,11 +1,16 @@
 # Changelog
 
-## v1.0.0 (2023-05-30)
+## v1.3.1 (2023-06-09)
 
-#### Breaking
+#### Fix
 
-- changed output of `format`, `formatParts`
-- made `currency` optional in money initialization (defaults to config.defaultCurrency)
+- fixed return type of chained `formatParts` (added sign field)
+
+## v1.3.0 (2023-06-07)
+
+#### Feature
+
+- added `fromIntString`, `fromFloatString` methods
 
 ## v1.1.0 (2023-05-30)
 
@@ -13,8 +18,9 @@
 
 - formatting values of less than 10 cents
 
-## v1.3.0 (2023-06-07)
+## v1.0.0 (2023-05-30)
 
-#### Feature
+#### Breaking
 
-- added `fromIntString`, `fromFloatString` methods
+- changed output of `format`, `formatParts`
+- made `currency` optional in money initialization (defaults to config.defaultCurrency)

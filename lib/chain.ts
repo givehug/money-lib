@@ -91,7 +91,11 @@ type ChainedMoney = {
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
 
   // --- Formatting ---
-  format: (ops?: { cents?: boolean; locale?: string }) => string;
+  format: (ops?: {
+    cents?: boolean;
+    locale?: string;
+    trailingZeros?: boolean;
+  }) => string;
   formatParts: (locale?: string) => {
     whole: string;
     wholeFormatted: string;

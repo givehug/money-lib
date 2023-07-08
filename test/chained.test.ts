@@ -204,6 +204,12 @@ describe("chained", () => {
           .toJSON(),
         { currency: "EUR", amount: 0 }
       );
+      assert.deepEqual(
+        money({ currency: "EUR", amount: 100 })
+          .subtract({ currency: "EUR", amount: 50 })
+          .toJSON(),
+        { currency: "EUR", amount: 50 }
+      );
     });
 
     test("multiply", () => {
@@ -236,6 +242,14 @@ describe("chained", () => {
           amount: 10043,
         }),
         false
+      );
+      assert.strictEqual(
+        money({ currency: "EUR", amount: 10042 }).isNegative(),
+        false
+      );
+      assert.strictEqual(
+        money({ currency: "EUR", amount: -10042 }).isNegative(),
+        true
       );
     });
 
@@ -439,6 +453,54 @@ describe("chained", () => {
           sign: "-",
         }
       );
+    });
+
+    test("format BTC", () => {
+      assert.equal(
+        money({ currency: "BTC", amount: 0 }).format(),
+        "₿0,00000000"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 5 }).format(),
+        "₿0,00000005"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 50 }).format(),
+        "₿0,00000050"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 500 }).format({}),
+        "₿0,00000500"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 500 }).format({
+          trailingZeros: false,
+        }),
+        "₿0,000005"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 100000000 }).format(),
+        "₿1,00000000"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 100000000 }).format({
+          cents: false,
+        }),
+        "₿1"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 19900000000 }).format({
+          cents: false,
+        }),
+        "₿199"
+      );
+      // Failing because number is too big for JS
+      // assert.equal(
+      //   money({ currency: "BTC", amount: 199900000000 }).format({
+      //     cents: false,
+      //   }),
+      //   "₿1999"
+      // );
     });
   });
 

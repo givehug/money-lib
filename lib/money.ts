@@ -73,7 +73,7 @@ export const subtract = (a: Money, b: Money): Money => {
 
 export const multiply = (
   m: Money,
-  multiplier: number,
+  multiplier: number, // | Money
   round = Math.round
 ): Money => {
   return fromInt(round(m.amount * multiplier), m.currency);
@@ -81,7 +81,7 @@ export const multiply = (
 
 export const divide = (
   m: Money,
-  divider: number,
+  divider: number, // | Money
   round = Math.round
 ): Money => {
   return fromInt(round(m.amount / divider), m.currency);
@@ -158,20 +158,30 @@ export const format = (
   ops?: {
     cents?: boolean; // if false, 00 cents will be omitted
     locale?: string;
+    trailingZeros?: boolean; // default: true; if false, 1.50 will be formatted as 1.5
   }
 ): string => {
-  const { cents, locale } = {
+  const { cents, locale, trailingZeros } = {
     cents: ops?.cents ?? true,
     locale: ops?.locale ?? config.defaultLocale,
+    trailingZeros: ops?.trailingZeros ?? true,
   };
   const parts = formatParts(m, locale);
   const signSymbol = parts.sign === "-" ? "-" : "";
 
-  if (!cents && parts.cents === "00") {
-    return `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
+  let formatted = "";
+
+  if (!cents && parts.cents === "0".repeat(getCurrency(m.currency).precision)) {
+    formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
+  } else {
+    formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
   }
 
-  return `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
+  if (!trailingZeros) {
+    formatted = formatted.replace(/0+$/, "");
+  }
+
+  return formatted;
 };
 
 export const formatIntegerPart = (

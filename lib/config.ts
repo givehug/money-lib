@@ -6,9 +6,18 @@ type Config = {
 };
 
 type Currency = {
-  precision: number;
+  /**
+   * Currency code - can be any string
+   */
   code: string;
+  /**
+   * Symbol to be used when formatting, eg. €
+   */
   symbol: string;
+  /**
+   * Scaling factor
+   */
+  precision: number;
 };
 
 type Locale = {
@@ -29,6 +38,11 @@ export const config: Config = {
       code: "USD",
       symbol: "$",
       precision: 2,
+    },
+    BTC: {
+      code: "BTC",
+      symbol: "₿",
+      precision: 8,
     },
   },
   locales: {

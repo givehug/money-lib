@@ -4,6 +4,10 @@
 
 [![NPM Version](https://img.shields.io/npm/v/money-lib)](https://www.npmjs.com/package/money-lib)
 
+### TODO:
+
+- Add BigInt support, serialize amount as string ?
+
 ### Features
 
 - Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code

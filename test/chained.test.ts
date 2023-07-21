@@ -494,13 +494,10 @@ describe("chained", () => {
         }),
         "₿199"
       );
-      // Failing because number is too big for JS
-      // assert.equal(
-      //   money({ currency: "BTC", amount: 199900000000 }).format({
-      //     cents: false,
-      //   }),
-      //   "₿1999"
-      // );
+      assert.equal(
+        money({ currency: "BTC", amount: 199900000005 }).format(),
+        "₿1.999,00000005"
+      );
     });
   });
 

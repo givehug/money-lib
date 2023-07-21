@@ -186,17 +186,8 @@ export const format = (
 
 export const formatIntegerPart = (
   integerPart: number,
-  locale = config.defaultLocale,
-  platform = detectPlatform()
+  locale = config.defaultLocale
 ) => {
-  const { decimalSeparator } = getLocale(locale);
-
-  if (platform === "react-native") {
-    return integerPart
-      .toFixed(0)
-      .replace(/\B(?=(\d{3})+(?!\d))/g, decimalSeparator === "," ? "." : ",");
-  }
-
   return new Intl.NumberFormat(locale).format(integerPart);
 };
 
@@ -256,21 +247,6 @@ export const parse = (
 
 const getCurrencyScale = (m: Money): number => {
   return 10 ** getCurrency(m.currency).precision;
-};
-
-const detectPlatform = (): "browser" | "react-native" | "node" => {
-  if (typeof document !== "undefined") {
-    return "browser";
-  }
-
-  if (
-    (typeof navigator !== "undefined" && navigator.product === "ReactNative") ||
-    (typeof global !== "undefined" && "__reactNativeVersion__" in global)
-  ) {
-    return "react-native";
-  }
-
-  return "node";
 };
 
 const getAmountSign = (m: Money) => {

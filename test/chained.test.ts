@@ -242,6 +242,10 @@ describe("chained", () => {
         money({ currency: "EUR", amount: 10042 }).divide(2).toJSON(),
         { currency: "EUR", amount: 5021 }
       );
+      assert.deepEqual(
+        money({ currency: "EUR", amount: 7044 }).divide(100).toJSON(),
+        { currency: "EUR", amount: 70 }
+      );
     });
   });
 
@@ -389,6 +393,54 @@ describe("chained", () => {
         }),
         -1
       );
+    });
+
+    test("min", () => {
+      const m1 = money({ amount: 1 });
+      const m2 = money({ amount: 0 });
+      const m3 = money({ amount: 2 });
+      const m4 = money({ amount: -1 });
+
+      assert.deepEqual(money().min(m1, m2, m3, m4).toJSON(), {
+        currency: "EUR",
+        amount: -1,
+      });
+      assert.deepEqual(money().min(m1, m2, m3, { amount: -2 }, m4).toJSON(), {
+        currency: "EUR",
+        amount: -2,
+      });
+      assert.deepEqual(money().min(m1, m2).toJSON(), {
+        currency: "EUR",
+        amount: 0,
+      });
+      assert.deepEqual(money().min(m1).toJSON(), {
+        currency: "EUR",
+        amount: 1,
+      });
+    });
+
+    test("max", () => {
+      const m1 = money({ amount: 1 });
+      const m2 = money({ amount: 0 });
+      const m3 = money({ amount: 2 });
+      const m4 = money({ amount: -1 });
+
+      assert.deepEqual(money().max(m1, m2, m3, m4).toJSON(), {
+        currency: "EUR",
+        amount: 2,
+      });
+      assert.deepEqual(money().max(m1, m2, m3, { amount: 3 }, m4).toJSON(), {
+        currency: "EUR",
+        amount: 3,
+      });
+      assert.deepEqual(money().max(m1, m2).toJSON(), {
+        currency: "EUR",
+        amount: 1,
+      });
+      assert.deepEqual(money().max(m1).toJSON(), {
+        currency: "EUR",
+        amount: 1,
+      });
     });
   });
 

@@ -1,3 +1,4 @@
+import { config } from "./config";
 import {
   zero,
   fromInt,
@@ -26,6 +27,8 @@ import {
   parse,
   toString,
   toFloatString,
+  min,
+  max,
 } from "./money";
 
 import type { Money } from "./money";
@@ -71,6 +74,14 @@ type ChainedMoney = {
   isZero: () => boolean;
   isPositive: () => boolean;
   isNegative: () => boolean;
+  min: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
+  max: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
 
   // --- Validation ---
   isValid: () => boolean;
@@ -116,6 +127,7 @@ type ChainedMoney = {
   // --- Serialization ---
   toJSON: () => Money;
   toInt: () => number;
+  toCents: () => number;
   toFloat: () => number;
   toString: () => string;
   toIntString: () => string;
@@ -127,6 +139,7 @@ type ChainedMoney = {
 const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   // unwrap Money from chain, or init with zero value
   const _m: Money = isValid(money) ? money : money.toJSON();
+  _m.currency = _m.currency || config.defaultCurrency;
 
   return {
     zero: () => moneyChain(zero()),
@@ -144,7 +157,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
       moneyChain(fromFloatString(amount, currency)),
 
     toInt: () => toInt(_m),
-
+    toCents: () => toInt(_m),
     toFloat: () => toFloat(_m),
 
     toString: () => toString(_m),
@@ -172,6 +185,16 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     isPositive: () => isPositive(_m),
 
     isNegative: () => isNegative(_m),
+
+    min: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
+      moneyChain(
+        min(moneyChain(m1).toJSON(), ...m.map((m) => moneyChain(m).toJSON()))
+      ),
+
+    max: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
+      moneyChain(
+        max(moneyChain(m1).toJSON(), ...m.map((m) => moneyChain(m).toJSON()))
+      ),
 
     isValid: () => isValid(_m),
 

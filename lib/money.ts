@@ -139,6 +139,16 @@ export const isNegative = (m: Money): boolean => {
   return m.amount < 0;
 };
 
+export const min = (m1: Money, ...m: Money[]): Money => {
+  return [m1, ...m].reduce((acc, curr) => (lessThan(acc, curr) ? acc : curr));
+};
+
+export const max = (m1: Money, ...m: Money[]): Money => {
+  return [m1, ...m].reduce((acc, curr) =>
+    greaterThan(acc, curr) ? acc : curr
+  );
+};
+
 // ------ Validation ------ //
 
 export const isValid = (m: any): m is Money => {

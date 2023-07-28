@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.5.0 (2023-07-28)
+
+#### Feature
+
+- `toCents` alias for `toInt`
+- `min` and `max` methods
+
+#### Fix
+
+- default currency when initializing money chain
+
 ## v1.3.1 (2023-06-09)
 
 #### Fix

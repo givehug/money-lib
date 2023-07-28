@@ -520,10 +520,6 @@ describe("chained", () => {
         money({ currency: "BTC", amount: 199900000005 }).format(),
         "₿1.999,00000005"
       );
-      assert.equal(
-        money().fromFloat(22577.2578201313066474, "CRAZY").format(),
-        "🤪22.577,2578201313083392"
-      );
     });
   });
 

@@ -24,6 +24,8 @@ import {
   format,
   formatParts,
   parse,
+  toString,
+  toFloatString,
 } from "./money";
 
 import type { Money } from "./money";
@@ -58,11 +60,6 @@ type ChainedMoney = {
    * Parse money represented as a float string, eg "100.45" (100 euros and 45 cents)
    */
   fromFloatString: (amount: string, currency?: string) => ChainedMoney;
-
-  // --- Conversion to number ---
-
-  toInt: () => number;
-  toFloat: () => number;
 
   // --- Comparison ---
   compare: (m: Money | ChainedMoney) => number;
@@ -118,6 +115,12 @@ type ChainedMoney = {
 
   // --- Serialization ---
   toJSON: () => Money;
+  toInt: () => number;
+  toFloat: () => number;
+  toString: () => string;
+  toIntString: () => string;
+  toCentsString: () => string;
+  toFloatString: () => string;
 };
 
 // Helper wrapper to allow chaining
@@ -143,6 +146,11 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     toInt: () => toInt(_m),
 
     toFloat: () => toFloat(_m),
+
+    toString: () => toString(_m),
+    toIntString: () => toString(_m),
+    toCentsString: () => toString(_m),
+    toFloatString: () => toFloatString(_m),
 
     compare: (m: Money | ChainedMoney) => compare(_m, moneyChain(m).toJSON()),
 

@@ -175,6 +175,24 @@ describe("chained", () => {
         100.42
       );
     });
+
+    test("toString", () => {
+      assert.deepEqual(
+        money({ currency: "EUR", amount: 10042 }).toString(),
+        "10042"
+      );
+      assert.deepEqual(money({ currency: "EUR", amount: 0 }).toString(), "0");
+      assert.deepEqual(money({ currency: "EUR", amount: 1 }).toString(), "1");
+    });
+
+    test("toFloatString", () => {
+      assert.deepEqual(
+        money({ currency: "EUR", amount: 10042 }).toFloat(),
+        "100.42"
+      );
+      assert.deepEqual(money({ currency: "EUR", amount: 1 }).toFloat(), "0.01");
+      assert.deepEqual(money({ currency: "EUR", amount: 0 }).toFloat(), "0.00");
+    });
   });
 
   describe("floatToInt intToFloat", () => {
@@ -497,6 +515,14 @@ describe("chained", () => {
       assert.equal(
         money({ currency: "BTC", amount: 199900000005 }).format(),
         "₿1.999,00000005"
+      );
+      assert.equal(
+        money({ currency: "BTC", amount: 199900000005 }).format(),
+        "₿1.999,00000005"
+      );
+      assert.equal(
+        money().fromFloat(22577.2578201313066474, "CRAZY").format(),
+        "🤪22.577,2578201313083392"
       );
     });
   });

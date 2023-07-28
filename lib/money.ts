@@ -61,6 +61,17 @@ export const toFloat = (m: Money): number => {
   return whole + cents / scale;
 };
 
+export const toString = (m: Money): string => {
+  return `${m.amount}`;
+};
+
+export const toFloatString = (m: Money): string => {
+  const scale = getCurrencyScale(m);
+  const { whole, cents } = split(m);
+
+  return `${whole}.${cents.toString().padStart(scale.toString().length, "0")}`;
+};
+
 // ------ Arithmetics ------ //
 
 export const add = (a: Money, b: Money): Money => {

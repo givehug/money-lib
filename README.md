@@ -102,11 +102,6 @@ type ChainedMoney = {
    */
   fromFloatString: (amount: string, currency?: string) => ChainedMoney;
 
-  // --- Conversion to number ---
-
-  toInt: () => number;
-  toFloat: () => number;
-
   // --- Comparison ---
   compare: (m: Money | ChainedMoney) => number;
   equals: (m: Money | ChainedMoney) => boolean;
@@ -134,13 +129,18 @@ type ChainedMoney = {
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
 
   // --- Formatting ---
-  format: (ops?: { cents?: boolean; locale?: string }) => string;
+  format: (ops?: {
+    cents?: boolean;
+    locale?: string;
+    trailingZeros?: boolean;
+  }) => string;
   formatParts: (locale?: string) => {
     whole: string;
     wholeFormatted: string;
     cents: string;
     currencySymbol: string;
     decimalSeparator: string;
+    sign: "+" | "-" | "";
   };
 
   // --- Parsing ---
@@ -156,6 +156,12 @@ type ChainedMoney = {
 
   // --- Serialization ---
   toJSON: () => Money;
+  toInt: () => number;
+  toFloat: () => number;
+  toString: () => string;
+  toIntString: () => string;
+  toCentsString: () => string;
+  toFloatString: () => string;
 };
 ```
 

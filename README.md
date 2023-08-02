@@ -8,7 +8,7 @@
 
 - Works with simple serialized `Money` type which describes monetary `amount` value and `currency` code
   (can be used in your app as you wish, eg in redux state)
-- Represents amount values as integers, in cents. This avoids floating point rounding errors.
+- Represents amount values as integers, in `Cents`. This avoids floating point rounding errors.
 - Zero dependencies
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
 - Works in browsers, node, react native (soon Deno, maybe already works)
@@ -18,7 +18,7 @@
 
 ```ts
 type Money = {
-  amount: number; // Integer representing cents
+  amount: Cents; // Integer representing cents
   currency: string; // Currency code (ISO 4217) or whatever you want
 };
 ```
@@ -28,23 +28,24 @@ type Money = {
 **_chained_**:
 
 ```ts
-import money, { Money } from "money-lib";
+import money, { Money, Cents } from "money-lib";
 
 const m = money()
   .debug() // money: { amount: 0, currency: 'EUR' }
   .add({ amount: 4499, currency: "EUR" })
-  .subtract({ amount: 299, currency: "EUR" })
-  .debug() // money: { amount: 4200, currency: 'EUR' }
+  .subtract({ amount: 298, currency: "EUR" })
+  .debug() // money: { amount: 4201, currency: 'EUR' }
   .multiply(5.56399)
-  .divide(5.56399)
-  .format();
+  .divide(5.56399);
 
-console.log(m); // €42,00
+// format
+console.log(m.format()); // €42,01
 
 // unwrap (serialize) Money from chain
-const m2: Money = m.toJSON();
+console.log(m.toJSON()); // { amount: 4201, currency: 'EUR' }
 
-console.log(m2); // { amount: 4200, currency: 'EUR' }
+console.log(m.toCents()); // 4201
+console.log(m.toFloat()); // 42.01
 ```
 
 <details>
@@ -84,7 +85,7 @@ type ChainedMoney = {
    * Init money from a int number (cents), eg 42 (42 cents)
    * @example fromInt(42, 'EUR') -> Money{amount: 42, currency: "EUR"};
    */
-  fromInt: (amount: number, currency?: string) => ChainedMoney;
+  fromInt: (amount: Cents, currency?: string) => ChainedMoney;
 
   /**
    * Init money from a float number (euros.cents), eg 42.99 (42 euros and 99 cents)
@@ -112,6 +113,14 @@ type ChainedMoney = {
   isZero: () => boolean;
   isPositive: () => boolean;
   isNegative: () => boolean;
+  min: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
+  max: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
 
   // --- Validation ---
   isValid: () => boolean;
@@ -156,7 +165,8 @@ type ChainedMoney = {
 
   // --- Serialization ---
   toJSON: () => Money;
-  toInt: () => number;
+  toInt: () => Cents;
+  toCents: () => Cents;
   toFloat: () => number;
   toString: () => string;
   toIntString: () => string;

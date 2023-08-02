@@ -31,7 +31,7 @@ import {
   max,
 } from "./money";
 
-import type { Money } from "./money";
+import type { Cents, Money } from "./money";
 
 type ChainedMoney = {
   // --- Initialization ---
@@ -46,7 +46,7 @@ type ChainedMoney = {
    * Init money from a int number (cents), eg 42 (42 cents)
    * @example fromInt(42, 'EUR') -> Money{amount: 42, currency: "EUR"};
    */
-  fromInt: (amount: number, currency?: string) => ChainedMoney;
+  fromInt: (amount: Cents, currency?: string) => ChainedMoney;
 
   /**
    * Init money from a float number (euros.cents), eg 42.99 (42 euros and 99 cents)
@@ -126,8 +126,8 @@ type ChainedMoney = {
 
   // --- Serialization ---
   toJSON: () => Money;
-  toInt: () => number;
-  toCents: () => number;
+  toInt: () => Cents;
+  toCents: () => Cents;
   toFloat: () => number;
   toString: () => string;
   toIntString: () => string;
@@ -144,7 +144,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   return {
     zero: () => moneyChain(zero()),
 
-    fromInt: (amount: number, currency?: string) =>
+    fromInt: (amount: Cents, currency?: string) =>
       moneyChain(fromInt(amount, currency)),
 
     fromFloat: (amount: number, currency?: string) =>

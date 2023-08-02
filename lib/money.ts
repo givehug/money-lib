@@ -1,7 +1,9 @@
 import { config, getCurrency, getLocale } from "./config";
 
+export type Cents = number;
+
 export type Money = {
-  amount: number; // Integer representing cents
+  amount: Cents; // Integer representing cents
   currency?: string; // Currency code (ISO 4217)
 };
 
@@ -12,7 +14,7 @@ export const zero = (currency = config.defaultCurrency) => {
 };
 
 export const fromInt = (
-  amount: number,
+  amount: Cents,
   currency = config.defaultCurrency
 ): Money => {
   return { amount, currency };
@@ -50,7 +52,7 @@ export const fromFloatString = (
 
 // ------ Serialization ------ //
 
-export const toInt = (m: Money): number => {
+export const toInt = (m: Money): Cents => {
   return m.amount;
 };
 

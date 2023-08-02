@@ -2,6 +2,7 @@ import assert from "node:assert";
 import { describe, test } from "node:test";
 
 import { formatIntegerPart } from "../lib/money.js";
+import { roundBank } from "../lib/helpers.js";
 
 describe("helpers", () => {
   describe("formatIntegerPart", () => {
@@ -22,5 +23,35 @@ describe("helpers", () => {
       assert.deepEqual(formatIntegerPart(-10042, "NL"), "-10.042");
       assert.deepEqual(formatIntegerPart(10042, "IE"), "10,042");
     });
+  });
+
+  test("roundBank", () => {
+    // Test cases with non-halfway values
+    assert.strictEqual(roundBank(4.2), 4);
+    assert.strictEqual(roundBank(5.8), 6);
+    assert.strictEqual(roundBank(6.3), 6);
+    assert.strictEqual(roundBank(7.7), 8);
+
+    // Test cases with halfway values
+    assert.strictEqual(roundBank(4.5), 4);
+    assert.strictEqual(roundBank(5.5), 6);
+    assert.strictEqual(roundBank(6.5), 6);
+    assert.strictEqual(roundBank(7.5), 8);
+
+    // Additional test cases
+    assert.strictEqual(roundBank(3.5), 4); // Edge case: Odd halfway value rounds up
+    assert.strictEqual(roundBank(4.499999999), 4); // Test against floating point precision
+    assert.strictEqual(roundBank(8), 8); // Integer value remains the same
+    assert.strictEqual(roundBank(3), 3); // Integer value remains the same
+
+    // Test cases with custom decimal places
+    assert.strictEqual(roundBank(3.146, 2), 3.15);
+    assert.strictEqual(roundBank(7.199, 1), 7.2);
+    assert.strictEqual(roundBank(8.555, 2), 8.56);
+
+    // Test cases with negative decimal places
+    assert.strictEqual(roundBank(12345.6789, -1), 12350);
+    assert.strictEqual(roundBank(12345.6789, -2), 12300);
+    assert.strictEqual(roundBank(12345.6789, -3), 12000);
   });
 });

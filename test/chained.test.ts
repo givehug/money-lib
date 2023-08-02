@@ -49,6 +49,10 @@ describe("chained", () => {
         currency: "EUR",
         amount: 10000,
       });
+      assert.deepEqual(money().fromFloat(0.025).toJSON(), {
+        currency: "EUR",
+        amount: 2, // bankers rounding applied
+      });
     });
 
     test("fromFloatString", () => {

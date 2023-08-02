@@ -1,4 +1,4 @@
-import { config, getCurrency, getLocale } from "./config";
+import { config, getCurrency, getDefaultRounder, getLocale } from "./config";
 
 export type Cents = number;
 
@@ -23,12 +23,12 @@ export const fromInt = (
 export const fromFloat = (
   amount: number,
   currency = config.defaultCurrency,
-  round = Math.round
+  round = getDefaultRounder()
 ): Money => {
   const scale = getCurrencyScale(zero(currency));
 
   return {
-    amount: round(amount * scale),
+    amount: round(amount * scale, 0),
     currency,
   };
 };
@@ -44,7 +44,7 @@ export const fromIntString = (
 export const fromFloatString = (
   amount: string,
   currency = config.defaultCurrency,
-  round = Math.round
+  round = getDefaultRounder()
 ): Money => {
   const parsed = parseFloat(amount);
   return fromFloat(Number.isNaN(parsed) ? 0 : parsed, currency, round);
@@ -87,17 +87,17 @@ export const subtract = (a: Money, b: Money): Money => {
 export const multiply = (
   m: Money,
   multiplier: number, // | Money
-  round = Math.round
+  round = getDefaultRounder()
 ): Money => {
-  return fromInt(round(m.amount * multiplier), m.currency);
+  return fromInt(round(m.amount * multiplier, 0), m.currency);
 };
 
 export const divide = (
   m: Money,
   divider: number, // | Money
-  round = Math.round
+  round = getDefaultRounder()
 ): Money => {
-  return fromInt(round(m.amount / divider), m.currency);
+  return fromInt(round(m.amount / divider, 0), m.currency);
 };
 
 // ------ Comparison ------ //

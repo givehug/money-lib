@@ -13,6 +13,7 @@
 - Provides initialization, serialization, parsing, formatting, arithmetics, comparison, etc
 - Works in browsers, node, react native (soon Deno, maybe already works)
 - Inspired by [go-money](https://github.com/Rhymond/go-money) and [js-money](https://github.com/davidkalosi/js-money)
+- Default rounding method when converting from floats is Bankers Rounding (round half to even)
 
 ### _Money_ type
 

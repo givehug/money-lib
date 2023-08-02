@@ -1,8 +1,11 @@
+import { roundBank } from "./helpers";
+
 type Config = {
   currencies: Record<string, Currency>;
   defaultCurrency: string;
   locales: Record<string, Locale>;
   defaultLocale: string;
+  defaultRoundingMethod: "bankers" | "up" | "down" | "round";
 };
 
 type Currency = {
@@ -28,6 +31,7 @@ type Locale = {
 export const config: Config = {
   defaultCurrency: "EUR",
   defaultLocale: "NL",
+  defaultRoundingMethod: "bankers",
   currencies: {
     EUR: {
       code: "EUR",
@@ -64,6 +68,21 @@ export const getLocale = (locale = config.defaultLocale) => ({
 export const getCurrency = (currency = config.defaultCurrency) => ({
   ...config.currencies[currency],
 });
+
+export const getDefaultRounder = () => {
+  switch (config.defaultRoundingMethod) {
+    case "bankers":
+      return roundBank;
+    case "up":
+      return Math.ceil;
+    case "down":
+      return Math.floor;
+    case "round":
+      return Math.round;
+    default:
+      return roundBank;
+  }
+};
 
 const validate = (c: Config): void => {
   if (!c) {

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.0 (2023-08-02)
+
+#### Feature
+
+- use `Bankers Rounding` as default rounder when parsing floats (configurable in config)
+
 ## v1.5.0 (2023-07-28)
 
 #### Feature

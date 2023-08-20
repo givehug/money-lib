@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.1 (2023-08-20)
+
+#### Feature
+
+- added `withPlusSign` format() option, default: false; if true, positive numbers will be prefixed with a plus sign
+
 ## v1.6.0 (2023-08-02)
 
 #### Feature

@@ -100,9 +100,19 @@ type ChainedMoney = {
 
   // --- Formatting ---
   format: (ops?: {
-    cents?: boolean;
     locale?: string;
+    /**
+     * default: true; if false, 00 cents will be omitted
+     */
+    cents?: boolean;
+    /**
+     * default: true; if false, 1.50 will be formatted as 1.5
+     */
     trailingZeros?: boolean;
+    /**
+     * default: false; if true, positive numbers will be prefixed with a plus sign
+     */
+    withPlusSign?: boolean;
   }) => string;
   formatParts: (locale?: string) => {
     whole: string;
@@ -212,7 +222,12 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     divide: (divider: number, round = Math.round) =>
       moneyChain(divide(_m, divider, round)),
 
-    format: (ops?: { cents?: boolean; locale?: string }) => format(_m, ops),
+    format: (ops?: {
+      locale?: string;
+      cents?: boolean;
+      withPlusSign?: boolean;
+      trailingZeros?: boolean;
+    }) => format(_m, ops),
 
     formatParts: (locale?: string) => formatParts(_m, locale),
 

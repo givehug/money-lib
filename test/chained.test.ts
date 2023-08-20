@@ -577,6 +577,22 @@ describe("chained", () => {
         "₿1.999,00000005"
       );
     });
+
+    test("format withPlusSign", () => {
+      assert.equal(money({ currency: "EUR", amount: 100 }).format(), "€1,00");
+      assert.equal(
+        money({ currency: "EUR", amount: 100 }).format({ withPlusSign: true }),
+        "+€1,00"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: 0 }).format({ withPlusSign: true }),
+        "€0,00"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: -100 }).format({ withPlusSign: true }),
+        "-€1,00"
+      );
+    });
   });
 
   describe("validation", () => {});

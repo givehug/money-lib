@@ -179,15 +179,17 @@ export const split = (m: Money): { whole: number; cents: number } => {
 export const format = (
   m: Money,
   ops?: {
-    cents?: boolean; // if false, 00 cents will be omitted
+    cents?: boolean; // default: true; if false, 00 cents will be omitted
     locale?: string;
     trailingZeros?: boolean; // default: true; if false, 1.50 will be formatted as 1.5
+    withPlusSign?: boolean; // default: false; if true, positive numbers will be prefixed with a plus sign
   }
 ): string => {
-  const { cents, locale, trailingZeros } = {
+  const { cents, locale, trailingZeros, withPlusSign } = {
     cents: ops?.cents ?? true,
     locale: ops?.locale ?? config.defaultLocale,
     trailingZeros: ops?.trailingZeros ?? true,
+    withPlusSign: ops?.withPlusSign ?? false,
   };
   const parts = formatParts(m, locale);
   const signSymbol = parts.sign === "-" ? "-" : "";
@@ -202,6 +204,10 @@ export const format = (
 
   if (!trailingZeros) {
     formatted = formatted.replace(/0+$/, "");
+  }
+
+  if (withPlusSign && parts.sign === "+") {
+    formatted = `+${formatted}`;
   }
 
   return formatted;

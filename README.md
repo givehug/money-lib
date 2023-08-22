@@ -137,12 +137,23 @@ type ChainedMoney = {
   subtract: (m: Money | ChainedMoney) => ChainedMoney;
   multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
+  abs: () => ChainedMoney;
 
   // --- Formatting ---
   format: (ops?: {
-    cents?: boolean;
     locale?: string;
+    /**
+     * default: true; if false, 00 cents will be omitted
+     */
+    cents?: boolean;
+    /**
+     * default: true; if false, 1.50 will be formatted as 1.5
+     */
     trailingZeros?: boolean;
+    /**
+     * default: false; if true, positive numbers will be prefixed with a plus sign
+     */
+    withPlusSign?: boolean;
   }) => string;
   formatParts: (locale?: string) => {
     whole: string;

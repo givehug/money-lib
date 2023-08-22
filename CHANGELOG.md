@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.2 (2023-08-22)
+
+#### Feature
+
+- added `abs` method
+
 ## v1.6.1 (2023-08-20)
 
 #### Feature

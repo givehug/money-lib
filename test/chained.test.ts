@@ -251,6 +251,17 @@ describe("chained", () => {
         { currency: "EUR", amount: 70 }
       );
     });
+
+    test("abs", () => {
+      assert.equal(
+        money({ currency: "EUR", amount: 10042 }).abs().format(),
+        "€100,42"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: -10042 }).abs().format(),
+        "€100,42"
+      );
+    });
   });
 
   describe("comparison", () => {

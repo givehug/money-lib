@@ -29,6 +29,7 @@ import {
   toFloatString,
   min,
   max,
+  abs,
 } from "./money";
 
 import type { Cents, Money } from "./money";
@@ -97,6 +98,7 @@ type ChainedMoney = {
   subtract: (m: Money | ChainedMoney) => ChainedMoney;
   multiply: (multiplier: number, round?: (n: number) => number) => ChainedMoney;
   divide: (divider: number, round?: (n: number) => number) => ChainedMoney;
+  abs: () => ChainedMoney;
 
   // --- Formatting ---
   format: (ops?: {
@@ -221,6 +223,8 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
     divide: (divider: number, round = Math.round) =>
       moneyChain(divide(_m, divider, round)),
+
+    abs: () => moneyChain(abs(_m)),
 
     format: (ops?: {
       locale?: string;

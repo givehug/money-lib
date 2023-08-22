@@ -100,6 +100,13 @@ export const divide = (
   return fromInt(round(m.amount / divider, 0), m.currency);
 };
 
+export const abs = (m: Money): Money => {
+  return {
+    ...m,
+    amount: Math.abs(m.amount),
+  };
+};
+
 // ------ Comparison ------ //
 
 export const compare = (a: Money, b: Money): -1 | 0 | 1 => {

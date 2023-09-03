@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.6.3 (2023-08-22)
+
+#### Fix
+
+- expose `config` method
+
 ## v1.6.2 (2023-08-22)
 
 #### Feature

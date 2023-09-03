@@ -645,4 +645,20 @@ describe("chained", () => {
       );
     });
   });
+
+  describe("config", () => {
+    test("EUR", () => {
+      money.config({
+        defaultCurrency: "USD",
+        defaultLocale: "IE",
+      });
+      assert.deepEqual(money().format(), "$0.00");
+
+      money.config({
+        defaultCurrency: "EUR",
+        defaultLocale: "NL",
+      });
+      assert.deepEqual(money().format(), "€0,00");
+    });
+  });
 });

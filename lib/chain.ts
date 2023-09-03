@@ -1,4 +1,4 @@
-import { config } from "./config";
+import { config, setConfig } from "./config";
 import {
   zero,
   fromInt,
@@ -250,5 +250,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     toJSON: () => _m,
   };
 };
+
+moneyChain.config = setConfig;
 
 export default moneyChain;

@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.6.4 (2023-09-09)
+
+#### Fix
+
+- fix `toFloatString` 0 padding
+- fix `fromIntString`
+- fix `fromFloatString`
+
+#### Chore
+
+- exclude test files from build
+- use bun for testing
+
 ## v1.6.3 (2023-08-22)
 
 #### Fix

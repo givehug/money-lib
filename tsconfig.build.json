@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "types": ["bun-types"],
     "target": "es2016",
     "module": "commonjs",
     "lib": ["es2017", "es7", "es6", "dom"],

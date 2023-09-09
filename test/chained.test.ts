@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { describe, test } from "node:test";
+import { describe, test } from "bun:test";
 
 import money from "../index";
 
@@ -30,172 +30,222 @@ describe("chained", () => {
 
   describe("initialization", () => {
     test("zero", () => {
-      assert.deepEqual(money().zero().toJSON(), { currency: "EUR", amount: 0 });
+      assert.ok(
+        Bun.deepEquals(money().zero().toJSON(), { currency: "EUR", amount: 0 })
+      );
     });
 
     test("fromInt", () => {
-      assert.deepEqual(money().fromInt(10042).toJSON(), {
-        currency: "EUR",
-        amount: 10042,
-      });
+      assert.ok(
+        Bun.deepEquals(money().fromInt(10042).toJSON(), {
+          currency: "EUR",
+          amount: 10042,
+        })
+      );
     });
 
     test("fromFloat", () => {
-      assert.deepEqual(money().fromFloat(100.42).toJSON(), {
-        currency: "EUR",
-        amount: 10042,
-      });
-      assert.deepEqual(money().fromFloat(100).toJSON(), {
-        currency: "EUR",
-        amount: 10000,
-      });
-      assert.deepEqual(money().fromFloat(0.025).toJSON(), {
-        currency: "EUR",
-        amount: 2, // bankers rounding applied
-      });
+      assert.ok(
+        Bun.deepEquals(money().fromFloat(100.42).toJSON(), {
+          currency: "EUR",
+          amount: 10042,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloat(100).toJSON(), {
+          currency: "EUR",
+          amount: 10000,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloat(0.025).toJSON(), {
+          currency: "EUR",
+          amount: 2, // bankers rounding applied
+        })
+      );
     });
 
     test("fromFloatString", () => {
-      assert.deepEqual(money().fromFloatString("100.42").toJSON(), {
-        currency: "EUR",
-        amount: 10042,
-      });
-      assert.deepEqual(money().fromFloatString("100").toJSON(), {
-        currency: "EUR",
-        amount: 10000,
-      });
-      assert.deepEqual(money().fromFloatString("100.42").toJSON(), {
-        currency: "EUR",
-        amount: 10042,
-      });
-      assert.deepEqual(money().fromFloatString("0").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromFloatString("1").toJSON(), {
-        currency: "EUR",
-        amount: 100,
-      });
-      assert.deepEqual(money().fromFloatString("0.01").toJSON(), {
-        currency: "EUR",
-        amount: 1,
-      });
-      assert.deepEqual(money().fromFloatString("0.001").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromFloatString("-100.42").toJSON(), {
-        currency: "EUR",
-        amount: -10042,
-      });
-      assert.deepEqual(money().fromFloatString("-1").toJSON(), {
-        currency: "EUR",
-        amount: -100,
-      });
-      assert.deepEqual(money().fromFloatString("-0.01").toJSON(), {
-        currency: "EUR",
-        amount: -1,
-      });
-      assert.deepEqual(money().fromFloatString("-0").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromFloatString("x").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(
-        money().fromFloatString("216.6666666666666667").toJSON(),
-        {
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("100.42").toJSON(), {
           currency: "EUR",
-          amount: 21667,
-        }
+          amount: 10042,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("100").toJSON(), {
+          currency: "EUR",
+          amount: 10000,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("100.42").toJSON(), {
+          currency: "EUR",
+          amount: 10042,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("0").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("1").toJSON(), {
+          currency: "EUR",
+          amount: 100,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("0.01").toJSON(), {
+          currency: "EUR",
+          amount: 1,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("0.001").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("-100.42").toJSON(), {
+          currency: "EUR",
+          amount: -10042,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("-1").toJSON(), {
+          currency: "EUR",
+          amount: -100,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("-0.01").toJSON(), {
+          currency: "EUR",
+          amount: -1,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("-0").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromFloatString("x").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(
+          money().fromFloatString("216.6666666666666667").toJSON(),
+          {
+            currency: "EUR",
+            amount: 21667,
+          }
+        )
       );
     });
 
     test("fromIntString", () => {
-      assert.deepEqual(money().fromIntString("10042").toJSON(), {
-        currency: "EUR",
-        amount: 10042,
-      });
-      assert.deepEqual(money().fromIntString("100").toJSON(), {
-        currency: "EUR",
-        amount: 100,
-      });
-      assert.deepEqual(money().fromIntString("100.42").toJSON(), {
-        currency: "EUR",
-        amount: 100,
-      });
-      assert.deepEqual(money().fromIntString("0").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromIntString("1").toJSON(), {
-        currency: "EUR",
-        amount: 1,
-      });
-      assert.deepEqual(money().fromIntString("0.01").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromIntString("0.001").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromIntString("-100.42").toJSON(), {
-        currency: "EUR",
-        amount: -100,
-      });
-      assert.deepEqual(money().fromIntString("-1").toJSON(), {
-        currency: "EUR",
-        amount: -1,
-      });
-      assert.deepEqual(money().fromIntString("-0.01").toJSON(), {
-        currency: "EUR",
-        amount: -0,
-      });
-      assert.deepEqual(money().fromIntString("-0").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().fromIntString("x").toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("10042").toJSON(), {
+          currency: "EUR",
+          amount: 10042,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("100").toJSON(), {
+          currency: "EUR",
+          amount: 100,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("100.42").toJSON(), {
+          currency: "EUR",
+          amount: 100,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("0").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("1").toJSON(), {
+          currency: "EUR",
+          amount: 1,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("0.01").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("0.001").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("-100.42").toJSON(), {
+          currency: "EUR",
+          amount: -100,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("-1").toJSON(), {
+          currency: "EUR",
+          amount: -1,
+        })
+      );
+      assert.equal(money().fromIntString("-0.01").toJSON().amount, 0);
+      assert.equal(money().fromIntString("-0").toJSON().amount, 0);
+      assert.ok(
+        Bun.deepEquals(money().fromIntString("x").toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
     });
   });
 
   describe("serialization", () => {
     test("toInt", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 }).toInt(),
-        10042
-      );
+      assert.equal(money({ currency: "EUR", amount: 10042 }).toInt(), 10042);
     });
 
     test("toFloat", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 }).toFloat(),
-        100.42
-      );
+      assert.equal(money({ currency: "EUR", amount: 10042 }).toFloat(), 100.42);
     });
 
     test("toString", () => {
-      assert.deepEqual(
+      assert.equal(
         money({ currency: "EUR", amount: 10042 }).toString(),
         "10042"
       );
-      assert.deepEqual(money({ currency: "EUR", amount: 0 }).toString(), "0");
-      assert.deepEqual(money({ currency: "EUR", amount: 1 }).toString(), "1");
+      assert.equal(money({ currency: "EUR", amount: 0 }).toString(), "0");
+      assert.equal(money({ currency: "EUR", amount: 1 }).toString(), "1");
     });
 
     test("toFloatString", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 }).toFloat(),
+      assert.equal(
+        money({ currency: "EUR", amount: 10042 }).toFloatString(),
         "100.42"
       );
-      assert.deepEqual(money({ currency: "EUR", amount: 1 }).toFloat(), "0.01");
-      assert.deepEqual(money({ currency: "EUR", amount: 0 }).toFloat(), "0.00");
+      assert.equal(
+        money({ currency: "EUR", amount: 1 }).toFloatString(),
+        "0.01"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: 0 }).toFloatString(),
+        "0.00"
+      );
     });
   });
 
@@ -211,44 +261,56 @@ describe("chained", () => {
 
   describe("arithmetics", () => {
     test("add", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 })
-          .add({ currency: "EUR", amount: 10042 })
-          .toJSON(),
-        { currency: "EUR", amount: 20084 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 10042 })
+            .add({ currency: "EUR", amount: 10042 })
+            .toJSON(),
+          { currency: "EUR", amount: 20084 }
+        )
       );
     });
 
     test("subtract", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 })
-          .subtract({ currency: "EUR", amount: 10042 })
-          .toJSON(),
-        { currency: "EUR", amount: 0 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 10042 })
+            .subtract({ currency: "EUR", amount: 10042 })
+            .toJSON(),
+          { currency: "EUR", amount: 0 }
+        )
       );
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 100 })
-          .subtract({ currency: "EUR", amount: 50 })
-          .toJSON(),
-        { currency: "EUR", amount: 50 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 100 })
+            .subtract({ currency: "EUR", amount: 50 })
+            .toJSON(),
+          { currency: "EUR", amount: 50 }
+        )
       );
     });
 
     test("multiply", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 }).multiply(2).toJSON(),
-        { currency: "EUR", amount: 20084 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 10042 }).multiply(2).toJSON(),
+          { currency: "EUR", amount: 20084 }
+        )
       );
     });
 
     test("divide", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 10042 }).divide(2).toJSON(),
-        { currency: "EUR", amount: 5021 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 10042 }).divide(2).toJSON(),
+          { currency: "EUR", amount: 5021 }
+        )
       );
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 7044 }).divide(100).toJSON(),
-        { currency: "EUR", amount: 70 }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 7044 }).divide(100).toJSON(),
+          { currency: "EUR", amount: 70 }
+        )
       );
     });
 
@@ -416,22 +478,30 @@ describe("chained", () => {
       const m3 = money({ amount: 2 });
       const m4 = money({ amount: -1 });
 
-      assert.deepEqual(money().min(m1, m2, m3, m4).toJSON(), {
-        currency: "EUR",
-        amount: -1,
-      });
-      assert.deepEqual(money().min(m1, m2, m3, { amount: -2 }, m4).toJSON(), {
-        currency: "EUR",
-        amount: -2,
-      });
-      assert.deepEqual(money().min(m1, m2).toJSON(), {
-        currency: "EUR",
-        amount: 0,
-      });
-      assert.deepEqual(money().min(m1).toJSON(), {
-        currency: "EUR",
-        amount: 1,
-      });
+      assert.ok(
+        Bun.deepEquals(money().min(m1, m2, m3, m4).toJSON(), {
+          currency: "EUR",
+          amount: -1,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().min(m1, m2, m3, { amount: -2 }, m4).toJSON(), {
+          currency: "EUR",
+          amount: -2,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().min(m1, m2).toJSON(), {
+          currency: "EUR",
+          amount: 0,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().min(m1).toJSON(), {
+          currency: "EUR",
+          amount: 1,
+        })
+      );
     });
 
     test("max", () => {
@@ -440,22 +510,30 @@ describe("chained", () => {
       const m3 = money({ amount: 2 });
       const m4 = money({ amount: -1 });
 
-      assert.deepEqual(money().max(m1, m2, m3, m4).toJSON(), {
-        currency: "EUR",
-        amount: 2,
-      });
-      assert.deepEqual(money().max(m1, m2, m3, { amount: 3 }, m4).toJSON(), {
-        currency: "EUR",
-        amount: 3,
-      });
-      assert.deepEqual(money().max(m1, m2).toJSON(), {
-        currency: "EUR",
-        amount: 1,
-      });
-      assert.deepEqual(money().max(m1).toJSON(), {
-        currency: "EUR",
-        amount: 1,
-      });
+      assert.ok(
+        Bun.deepEquals(money().max(m1, m2, m3, m4).toJSON(), {
+          currency: "EUR",
+          amount: 2,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().max(m1, m2, m3, { amount: 3 }, m4).toJSON(), {
+          currency: "EUR",
+          amount: 3,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().max(m1, m2).toJSON(), {
+          currency: "EUR",
+          amount: 1,
+        })
+      );
+      assert.ok(
+        Bun.deepEquals(money().max(m1).toJSON(), {
+          currency: "EUR",
+          amount: 1,
+        })
+      );
     });
   });
 
@@ -508,35 +586,41 @@ describe("chained", () => {
     });
 
     test("format negative amount", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: -100042 }).format(),
-        "-€1.000,42"
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: -100042 }).format(),
+          "-€1.000,42"
+        )
       );
     });
 
     test("formatParts", () => {
-      assert.deepEqual(
-        money({ currency: "EUR", amount: 100055542 }).formatParts(),
-        {
-          cents: "42",
-          currencySymbol: "€",
-          decimalSeparator: ",",
-          whole: "1000555",
-          wholeFormatted: "1.000.555",
-          sign: "+",
-        }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: 100055542 }).formatParts(),
+          {
+            cents: "42",
+            currencySymbol: "€",
+            decimalSeparator: ",",
+            whole: "1000555",
+            wholeFormatted: "1.000.555",
+            sign: "+",
+          }
+        )
       );
 
-      assert.deepEqual(
-        money({ currency: "EUR", amount: -100055542 }).formatParts(),
-        {
-          cents: "42",
-          currencySymbol: "€",
-          decimalSeparator: ",",
-          whole: "1000555",
-          wholeFormatted: "1.000.555",
-          sign: "-",
-        }
+      assert.ok(
+        Bun.deepEquals(
+          money({ currency: "EUR", amount: -100055542 }).formatParts(),
+          {
+            cents: "42",
+            currencySymbol: "€",
+            decimalSeparator: ",",
+            whole: "1000555",
+            wholeFormatted: "1.000.555",
+            sign: "-",
+          }
+        )
       );
     });
 
@@ -616,9 +700,15 @@ describe("chained", () => {
         currency: "EUR",
         amount: 1050099,
       };
-      assert.deepEqual(money().parse("10.500,99", "EUR").toJSON(), expected);
-      assert.deepEqual(money().parse("10500,99", "EUR").toJSON(), expected);
-      assert.deepEqual(money().parse("10_500 , 99", "EUR").toJSON(), expected);
+      assert.ok(
+        Bun.deepEquals(money().parse("10.500,99", "EUR").toJSON(), expected)
+      );
+      assert.ok(
+        Bun.deepEquals(money().parse("10500,99", "EUR").toJSON(), expected)
+      );
+      assert.ok(
+        Bun.deepEquals(money().parse("10_500 , 99", "EUR").toJSON(), expected)
+      );
       assert.notDeepEqual(money().parse("10500.99", "EUR").toJSON(), expected);
     });
 
@@ -627,17 +717,23 @@ describe("chained", () => {
         currency: "EUR",
         amount: 1050099,
       };
-      assert.deepEqual(
-        money().parse("10,500.99", "EUR", undefined, ".").toJSON(),
-        expected
+      assert.ok(
+        Bun.deepEquals(
+          money().parse("10,500.99", "EUR", undefined, ".").toJSON(),
+          expected
+        )
       );
-      assert.deepEqual(
-        money().parse("10500.99", "EUR", undefined, ".").toJSON(),
-        expected
+      assert.ok(
+        Bun.deepEquals(
+          money().parse("10500.99", "EUR", undefined, ".").toJSON(),
+          expected
+        )
       );
-      assert.deepEqual(
-        money().parse("10_500 . 99", "EUR", undefined, ".").toJSON(),
-        expected
+      assert.ok(
+        Bun.deepEquals(
+          money().parse("10_500 . 99", "EUR", undefined, ".").toJSON(),
+          expected
+        )
       );
       assert.notDeepEqual(
         money().parse("10.500,99", "EUR", undefined, ".").toJSON(),
@@ -652,13 +748,13 @@ describe("chained", () => {
         defaultCurrency: "USD",
         defaultLocale: "IE",
       });
-      assert.deepEqual(money().format(), "$0.00");
+      assert.equal(money().format(), "$0.00");
 
       money.config({
         defaultCurrency: "EUR",
         defaultLocale: "NL",
       });
-      assert.deepEqual(money().format(), "€0,00");
+      assert.equal(money().format(), "€0,00");
     });
   });
 });

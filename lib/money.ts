@@ -38,7 +38,7 @@ export const fromIntString = (
   currency = config.defaultCurrency
 ): Money => {
   const parsed = parseInt(amount, 10);
-  return fromInt(Number.isNaN(parsed) ? 0 : parsed, currency);
+  return fromInt(Number.isNaN(parsed) || parsed === 0 ? 0 : parsed, currency);
 };
 
 export const fromFloatString = (
@@ -47,7 +47,11 @@ export const fromFloatString = (
   round = getDefaultRounder()
 ): Money => {
   const parsed = parseFloat(amount);
-  return fromFloat(Number.isNaN(parsed) ? 0 : parsed, currency, round);
+  return fromFloat(
+    Number.isNaN(parsed) || parsed === 0 ? 0 : parsed,
+    currency,
+    round
+  );
 };
 
 // ------ Serialization ------ //
@@ -71,7 +75,7 @@ export const toFloatString = (m: Money): string => {
   const scale = getCurrencyScale(m);
   const { whole, cents } = split(m);
 
-  return `${whole}.${cents.toString().padStart(scale.toString().length, "0")}`;
+  return `${whole}.${cents.toString().padStart(Math.log10(scale), "0")}`;
 };
 
 // ------ Arithmetics ------ //

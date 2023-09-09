@@ -4,9 +4,8 @@
   "description": "Simple TypeScript library to work with money",
   "main": "dist/index.js",
   "scripts": {
-    "test": "node --loader tsx --test ./test/*",
-    "build": "tsc",
-    "prepublish": "npm run build",
+    "test": "bun test",
+    "build": "tsc --project tsconfig.build.json",
     "release": "npm run build && npm publish"
   },
   "repository": {
@@ -32,7 +31,6 @@
   "homepage": "https://github.com/givehug/money#readme",
   "devDependencies": {
     "tsx": "3.12.1",
-    "@types/node": "18.11.18",
-    "typescript": "4.9.5"
+    "bun-types": "^1.0.1"
   }
 }

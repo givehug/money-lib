@@ -1,11 +1,5 @@
 import { config, getCurrency, getDefaultRounder, getLocale } from "./config";
-
-export type Cents = number;
-
-export type Money = {
-  amount: Cents; // Integer representing cents
-  currency?: string; // Currency code (ISO 4217)
-};
+import type { Cents, Money } from "./types";
 
 // ------ Initialization ------ //
 

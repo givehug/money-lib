@@ -1,4 +1,4 @@
-export type { Money } from "./lib/money";
+export type { Money, Cents } from "./lib/types";
 
 import { default as money } from "./lib/chain";
 

@@ -74,12 +74,18 @@ export const toFloatString = (m: Money): string => {
 
 // ------ Arithmetics ------ //
 
-export const add = (a: Money, b: Money): Money => {
-  return fromInt(a.amount + b.amount, a.currency);
+export const add = (m1: Money, m2: Money, ...m: Money[]): Money => {
+  return {
+    ...m1,
+    amount: [m2, ...m].reduce((sum, curr) => sum + curr.amount, m1.amount),
+  };
 };
 
-export const subtract = (a: Money, b: Money): Money => {
-  return fromInt(a.amount - b.amount, a.currency);
+export const subtract = (m1: Money, m2: Money, ...m: Money[]): Money => {
+  return {
+    ...m1,
+    amount: [m2, ...m].reduce((diff, curr) => diff - curr.amount, m1.amount),
+  };
 };
 
 export const multiply = (

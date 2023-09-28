@@ -138,14 +138,20 @@ export type ChainedMoney = {
    * TODO: add support for multiple arguments to return sum of all (add(m1, m2, m3, ...)
    * @example m1.add(m2) -> m3
    */
-  add: (m: Money | ChainedMoney) => ChainedMoney;
+  add: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
 
   /**
    * Subtract two Money objects
    * TODO: add support for multiple arguments to return diff of all (subtract(m1, m2, m3, ...)
    * @example m1.subtract(m2) -> m3
    */
-  subtract: (m: Money | ChainedMoney) => ChainedMoney;
+  subtract: (
+    m1: Money | ChainedMoney,
+    ...m: (Money | ChainedMoney)[]
+  ) => ChainedMoney;
 
   /**
    * Multiply a Money object by a number

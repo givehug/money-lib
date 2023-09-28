@@ -271,6 +271,15 @@ describe("chained", () => {
       );
     });
 
+    test("add many ", () => {
+      assert.ok(
+        Bun.deepEquals(
+          money({ amount: 1 }).add({ amount: 2 }, { amount: 3 }).toJSON(),
+          { currency: "EUR", amount: 6 }
+        )
+      );
+    });
+
     test("subtract", () => {
       assert.ok(
         Bun.deepEquals(
@@ -286,6 +295,17 @@ describe("chained", () => {
             .subtract({ currency: "EUR", amount: 50 })
             .toJSON(),
           { currency: "EUR", amount: 50 }
+        )
+      );
+    });
+
+    test("subtract many", () => {
+      assert.ok(
+        Bun.deepEquals(
+          money({ amount: 6 })
+            .subtract({ amount: 3 }, { amount: 2 }, { amount: 1 })
+            .toJSON(),
+          { currency: "EUR", amount: 0 }
         )
       );
     });

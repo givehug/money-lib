@@ -99,11 +99,23 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
     split: () => split(_m),
 
-    add: (m: Money | ChainedMoney) =>
-      moneyChain(add(_m, moneyChain(m).toJSON())),
+    add: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
+      moneyChain(
+        add(
+          _m,
+          moneyChain(m1).toJSON(),
+          ...m.map((m) => moneyChain(m).toJSON())
+        )
+      ),
 
-    subtract: (m: Money | ChainedMoney) =>
-      moneyChain(subtract(_m, moneyChain(m).toJSON())),
+    subtract: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
+      moneyChain(
+        subtract(
+          _m,
+          moneyChain(m1).toJSON(),
+          ...m.map((m) => moneyChain(m).toJSON())
+        )
+      ),
 
     multiply: (multiplier: number, round = Math.round) =>
       moneyChain(multiply(_m, multiplier, round)),

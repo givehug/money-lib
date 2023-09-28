@@ -34,10 +34,14 @@ import {
 
 import type { ChainedMoney, Cents, Money } from "./types";
 
+// unwrap Money from chain, or init with zero value
+const unwrap = (m: Money | ChainedMoney): Money => {
+  return isValid(m) ? m : m.toJSON();
+};
+
 // Helper wrapper to allow chaining
 const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
-  // unwrap Money from chain, or init with zero value
-  const _m: Money = isValid(money) ? money : money.toJSON();
+  const _m = unwrap(money);
   _m.currency = _m.currency || config.defaultCurrency;
 
   return {
@@ -64,20 +68,19 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     toCentsString: () => toString(_m),
     toFloatString: () => toFloatString(_m),
 
-    compare: (m: Money | ChainedMoney) => compare(_m, moneyChain(m).toJSON()),
+    compare: (m: Money | ChainedMoney) => compare(_m, unwrap(m)),
 
-    equals: (m: Money | ChainedMoney) => equals(_m, moneyChain(m).toJSON()),
+    equals: (m: Money | ChainedMoney) => equals(_m, unwrap(m)),
 
-    greaterThan: (m: Money | ChainedMoney) =>
-      greaterThan(_m, moneyChain(m).toJSON()),
+    greaterThan: (m: Money | ChainedMoney) => greaterThan(_m, unwrap(m)),
 
     greaterThanOrEqual: (m: Money | ChainedMoney) =>
-      greaterThanOrEqual(_m, moneyChain(m).toJSON()),
+      greaterThanOrEqual(_m, unwrap(m)),
 
-    lessThan: (m: Money | ChainedMoney) => lessThan(_m, moneyChain(m).toJSON()),
+    lessThan: (m: Money | ChainedMoney) => lessThan(_m, unwrap(m)),
 
     lessThanOrEqual: (m: Money | ChainedMoney) =>
-      lessThanOrEqual(_m, moneyChain(m).toJSON()),
+      lessThanOrEqual(_m, unwrap(m)),
 
     isZero: () => isZero(_m),
 
@@ -86,36 +89,20 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
     isNegative: () => isNegative(_m),
 
     min: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
-      moneyChain(
-        min(moneyChain(m1).toJSON(), ...m.map((m) => moneyChain(m).toJSON()))
-      ),
+      moneyChain(min(unwrap(m1), ...m.map(unwrap))),
 
     max: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
-      moneyChain(
-        max(moneyChain(m1).toJSON(), ...m.map((m) => moneyChain(m).toJSON()))
-      ),
+      moneyChain(max(unwrap(m1), ...m.map(unwrap))),
 
     isValid: () => isValid(_m),
 
     split: () => split(_m),
 
     add: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
-      moneyChain(
-        add(
-          _m,
-          moneyChain(m1).toJSON(),
-          ...m.map((m) => moneyChain(m).toJSON())
-        )
-      ),
+      moneyChain(add(_m, unwrap(m1), ...m.map(unwrap))),
 
     subtract: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
-      moneyChain(
-        subtract(
-          _m,
-          moneyChain(m1).toJSON(),
-          ...m.map((m) => moneyChain(m).toJSON())
-        )
-      ),
+      moneyChain(subtract(_m, unwrap(m1), ...m.map(unwrap))),
 
     multiply: (multiplier: number, round = Math.round) =>
       moneyChain(multiply(_m, multiplier, round)),

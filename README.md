@@ -471,3 +471,8 @@ money.config({
 
 </details>
 ````
+
+### TODO
+
+- big numbers
+- support fractions with more than 2 digits eg 1.9999 euros (currently rounds to 2 decimals) (eg for stock prices etc)

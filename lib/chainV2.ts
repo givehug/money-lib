@@ -138,8 +138,18 @@ export const moneyChain =
   };
 
 export const setup = <CC extends string, CS extends string>(
-  config: ConfigV2<CC, CS>
+  config?: ConfigV2<CC, CS>
 ) => {
+  config ??= {
+    defaultCurrency: defaultConfig.defaultCurrency as CC,
+    defaultRoundingMethod: defaultConfig.defaultRoundingMethod,
+    currencies: Object.values(defaultConfig.currencies).map((c) => ({
+      code: c.code as CC,
+      symbol: c.symbol as CS,
+      scale: c.precision,
+    })),
+  };
+
   setConfig({
     defaultCurrency: config.defaultCurrency,
     defaultRoundingMethod: config.defaultRoundingMethod,

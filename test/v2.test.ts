@@ -1,10 +1,10 @@
 import assert from "node:assert";
 import { describe, test } from "bun:test";
 
-import { setup } from "../v2";
+import { setupMoney } from "../v2";
 
 describe("v2", () => {
-  const { money } = setup({
+  const { money } = setupMoney({
     currencies: [
       {
         code: "EUR" as const,

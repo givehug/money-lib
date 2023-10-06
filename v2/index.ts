@@ -1,7 +1,7 @@
 export type { Money, Cents } from "../lib/types";
 
 // import { config } from "../lib/config";
-export { setup } from "../lib/chainV2";
+export { setupMoney } from "../lib/chainV2";
 // import { moneyChain } from "../lib/chainV2";
 
 // const money = setupV2(config); // setup with default config

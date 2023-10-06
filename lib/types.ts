@@ -281,3 +281,237 @@ export type ChainedMoney = {
    */
   toFloatString: () => string;
 };
+
+export type ChainedMoneyV2 = {
+  // --- Comparison ---
+
+  /**
+   * Compare two Money objects
+   * @example m1.compare(m2) -> 1
+   */
+  cmp: (m: Money | ChainedMoneyV2) => 1 | 0 | -1;
+
+  /**
+   * Check if two Money objects are equal
+   * @example m1.equals(m2) -> false
+   */
+  eq: (m: Money | ChainedMoneyV2) => boolean;
+
+  /**
+   * Check if a Money object is greater than another
+   * @example m1.greaterThan(m1) -> true
+   */
+  gt: (m: Money | ChainedMoneyV2) => boolean;
+
+  /**
+   * Check if a Money object is greater than or equal to another
+   * @example greaterThanOrEqual(m1, m2) -> true
+   */
+  gte: (m: Money | ChainedMoneyV2) => boolean;
+
+  /**
+   * Check if a Money object is less than another
+   * @example lessThan(m1, m2) -> false
+   */
+  lt: (m: Money | ChainedMoneyV2) => boolean;
+
+  /**
+   * Check if a Money object is less than or equal to another
+   * @example lessThanOrEqual(m1, m2) -> true
+   */
+  lte: (m: Money | ChainedMoneyV2) => boolean;
+
+  /**
+   * Check if a Money object is zero
+   * @example isZero(m) -> false
+   */
+  is0: () => boolean;
+
+  /**
+   * Check if a Money object is positive
+   * @example isPositive(m) -> true
+   */
+  isPos: () => boolean;
+
+  /**
+   * Check if a Money object is negative
+   * @example isNegative(m) -> false
+   */
+  isNeg: () => boolean;
+
+  /**
+   * Return the smallest of multiple Money objects
+   * @example min(m1, m2, m3, ...) -> m2
+   */
+  min: (
+    m1: Money | ChainedMoneyV2,
+    ...m: (Money | ChainedMoneyV2)[]
+  ) => ChainedMoneyV2;
+
+  /**
+   * Return the largest of multiple Money objects
+   * @example max(m1, m2, m3, ...) -> m3
+   */
+  max: (
+    m1: Money | ChainedMoneyV2,
+    ...m: (Money | ChainedMoneyV2)[]
+  ) => ChainedMoneyV2;
+
+  // --- Validation ---
+
+  /**
+   * Check if a Money object is valid
+   * @example isValid(m) -> true
+   */
+  validate: () => boolean;
+
+  // --- Transformation ---
+
+  /**
+   * Split a Money object into a whole and cents part
+   * @example split(m) -> { whole: 1, cents: 50 }
+   */
+  split: () => {
+    whole: number;
+    cents: number;
+  };
+
+  // --- Arithmetic ---
+
+  /**
+   * Add two Money objects
+   * TODO: add support for multiple arguments to return sum of all (add(m1, m2, m3, ...)
+   * @example m1.add(m2) -> m3
+   */
+  add: (
+    m1: Money | ChainedMoneyV2,
+    ...m: (Money | ChainedMoneyV2)[]
+  ) => ChainedMoneyV2;
+
+  /**
+   * Subtract two Money objects
+   * TODO: add support for multiple arguments to return diff of all (subtract(m1, m2, m3, ...)
+   * @example m1.subtract(m2) -> m3
+   */
+  sub: (
+    m1: Money | ChainedMoneyV2,
+    ...m: (Money | ChainedMoneyV2)[]
+  ) => ChainedMoneyV2;
+
+  /**
+   * Multiply a Money object by a number
+   * TODO(maybe): multiply money by money, eg m1.multiply(m2)
+   * @example m.multiply(2) -> m2
+   */
+  mul: (multiplier: number, round?: (n: number) => number) => ChainedMoneyV2;
+
+  /**
+   * Divide a Money object by a number
+   * TODO(maybe): divide money by money, eg m1.divide(m2)
+   * @example m.divide(2) -> m2
+   */
+  div: (divider: number, round?: (n: number) => number) => ChainedMoneyV2;
+
+  /**
+   * Return the absolute value of a Money object
+   * @example money({amount: -100}) -> Money{amount: 100}
+   */
+  abs: () => ChainedMoneyV2;
+
+  // --- Formatting ---
+
+  /**
+   * Format a Money object as a string
+   * @example format(m, { locale: "en-US", cents: true, withPlusSign: false, trailingZeros: true }) -> "€1.00"
+   */
+  fmt: (ops?: {
+    locale?: string;
+    /**
+     * default: true; if false, 00 cents will be omitted
+     */
+    cents?: boolean;
+    /**
+     * default: true; if false, 1.50 will be formatted as 1.5
+     */
+    trailingZeros?: boolean;
+    /**
+     * default: false; if true, positive numbers will be prefixed with a plus sign
+     */
+    withPlusSign?: boolean;
+  }) => string;
+
+  /**
+   * Format a Money object as an object containing the whole, cents, currencySymbol, decimalSeparator and sign
+   * @example formatParts(m, "en-US") -> { whole: "1", wholeFormatted: "1", cents: "00", currencySymbol: "€", decimalSeparator: ".", sign: "" }
+   */
+  fmts: (locale?: string) => {
+    whole: string;
+    wholeFormatted: string;
+    cents: string;
+    currencySymbol: string;
+    decimalSeparator: string;
+    sign: "+" | "-" | "";
+  };
+
+  // --- Parsing ---
+
+  /**
+   * Parse a string into a Money object
+   * @example parse("€1.00", "EUR", "en-US", ".") -> Money{amount: 100, currency: "EUR"}
+   */
+  parse: (
+    s: string,
+    currency: string,
+    locale?: string,
+    decimalSeparator?: "." | ","
+  ) => ChainedMoneyV2;
+
+  // --- Debug ---
+
+  /**
+   * Log a Money object to the console
+   * @example debug("money:") -> "money: Money{amount: 100, currency: "EUR"}"
+   */
+  debug: (prefix?: string) => ChainedMoneyV2;
+
+  // --- Serialization ---
+
+  /**
+   * Return the Money object
+   * @example toJSON() -> Money{amount: 100, currency: "EUR"}
+   */
+  json: () => Money;
+
+  // --- Conversion ---
+
+  /**
+   * Return the Money object as an int
+   * @example money({amount: 10000}).toInt() -> 10000
+   */
+  int: () => Cents;
+
+  /**
+   * Return the Money object as an int (alias for toInt)
+   * @example money({amount: 10000}).toString() -> "100.00"
+   */
+  cents: () => Cents;
+
+  /**
+   * Return the Money object as a float
+   * @example money({amount: 10000}).toFloat() -> 100.00
+   */
+  float: () => number;
+  number: () => number;
+
+  /**
+   * Return the Money object as a string
+   * @example money({amount: 10000}).toString() -> "10000"
+   */
+  centStr: () => string;
+
+  /**
+   * Return the Money object as a string
+   * @example money({amount: 10000}).toFloatString() -> "100.00"
+   */
+  string: () => string;
+};

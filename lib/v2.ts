@@ -1,6 +1,6 @@
 import { fromFloat } from "./money";
 import type { Money } from "./types";
-import m from "..";
+import { moneyChainV2 } from "./chain";
 
 type Config = {
   currencies: Array<{
@@ -61,7 +61,7 @@ export const setup = <
   ) => {
     const parsedMoney = parseMoney(input, config);
 
-    return m({
+    return moneyChainV2({
       amount: parsedMoney.amount,
       currency: currency ?? parsedMoney.currency ?? config.defaultCurrency,
     });

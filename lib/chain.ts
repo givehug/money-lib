@@ -46,12 +46,16 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
   return {
     zero: () => moneyChain(zero()),
+
     fromInt: (amount: Cents, currency?: string) =>
       moneyChain(fromInt(amount, currency)),
+
     fromFloat: (amount: number, currency?: string) =>
       moneyChain(fromFloat(amount, currency)),
+
     fromIntString: (amount: string, currency?: string) =>
       moneyChain(fromIntString(amount, currency)),
+
     fromFloatString: (amount: string, currency?: string) =>
       moneyChain(fromFloatString(amount, currency)),
 

@@ -1,30 +1,16 @@
-import { fromFloat } from "./money";
-import type { Money } from "./types";
+import { fromFloat, isValid } from "./money";
+import type { ConfigV2, Money, MoneyV2 } from "./types";
 import { moneyChainV2 } from "./chain";
-
-type Config = {
-  currencies: Array<{
-    code: string;
-    symbol: string;
-  }>;
-  defaultCurrency: string;
-  defaultRoundingMethod: "bankers" | "up" | "down" | "round";
-};
-
-type Input<CurrencyCode extends string, CurrencySymbol extends string> =
-  | number
-  | `${number}`
-  | `${CurrencySymbol}${number}`
-  | `${CurrencySymbol} ${number}`
-  | `${number}${Lowercase<CurrencyCode>}`
-  | `${number} ${Lowercase<CurrencyCode>}`
-  | `${number}${CurrencyCode}`
-  | `${number} ${CurrencyCode}`;
+import { setConfig } from "./config";
 
 const parseMoney = <CurrencyCode extends string, CurrencySymbol extends string>(
-  input: Input<CurrencyCode, CurrencySymbol>,
-  config: Config
+  input: MoneyV2<CurrencyCode, CurrencySymbol>,
+  config: ConfigV2
 ): Money => {
+  if (isValid(input)) {
+    return input;
+  }
+
   if (typeof input === "number") {
     return fromFloat(input, config.defaultCurrency);
   }
@@ -40,8 +26,8 @@ const parseMoney = <CurrencyCode extends string, CurrencySymbol extends string>(
   return fromFloat(amount, currency?.code ?? config.defaultCurrency);
 };
 
-export const setup = <
-  C extends Config,
+export const setupV2 = <
+  C extends ConfigV2,
   CurrencyCode extends C["currencies"][number]["code"],
   CurrencySymbol extends C["currencies"][number]["symbol"]
 >(
@@ -60,6 +46,21 @@ export const setup = <
     currency?: CurrencyCode | Lowercase<CurrencyCode>
   ) => {
     const parsedMoney = parseMoney(input, config);
+
+    setConfig({
+      defaultCurrency: config.defaultCurrency,
+      defaultRoundingMethod: config.defaultRoundingMethod,
+      currencies: Object.fromEntries(
+        config.currencies.map((c) => [
+          c.code,
+          {
+            code: c.code,
+            symbol: c.symbol,
+            precision: c.scale,
+          },
+        ])
+      ),
+    });
 
     return moneyChainV2({
       amount: parsedMoney.amount,

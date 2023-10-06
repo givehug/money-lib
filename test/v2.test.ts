@@ -1,22 +1,30 @@
 import assert from "node:assert";
 import { describe, test } from "bun:test";
 
-import { setup } from "../lib/v2";
+import { setupV2 } from "../lib/v2";
 
 describe("v2", () => {
-  const { money } = setup({
+  const { money } = setupV2({
     currencies: [
       {
         code: "EUR" as const,
         symbol: "€" as const,
+        scale: 2,
       },
       {
         code: "USD" as const,
         symbol: "$" as const,
+        scale: 2,
       },
       {
         code: "BTC" as const,
         symbol: "₿" as const,
+        scale: 8,
+      },
+      {
+        code: "SPOOKY" as const,
+        symbol: "🎃" as const,
+        scale: 5,
       },
     ],
     defaultCurrency: "EUR" as const,
@@ -38,6 +46,8 @@ describe("v2", () => {
     money("100usd");
     money("100USD");
     money("100 btc");
+    money("🎃 15");
+    money("15 spooky");
 
     // money("200uah"); // should not compile
   });
@@ -420,6 +430,11 @@ describe("v2", () => {
       //   "€1,000.42"
       // );
       assert.equal(money(0.01).fmt(), "€0,01");
+      assert.equal(money("🎃 -10.61").fmt(), "-🎃10,61000");
+      assert.equal(
+        money("0.15 spooky").fmt({ trailingZeros: false }),
+        "🎃0,15"
+      );
     });
 
     test("fmt negative amount", () => {

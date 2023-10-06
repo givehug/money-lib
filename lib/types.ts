@@ -282,6 +282,32 @@ export type ChainedMoney = {
   toFloatString: () => string;
 };
 
+export type ConfigV2 = {
+  currencies: Array<{
+    code: string;
+    symbol: string;
+    scale: number;
+  }>;
+  defaultCurrency: string;
+  defaultRoundingMethod: "bankers" | "up" | "down" | "round";
+};
+
+export type MoneyV2<
+  CurrencyCode extends string,
+  CurrencySymbol extends string
+> =
+  | Money
+  | number
+  | `${number}`
+  | `${CurrencySymbol}${number}`
+  | `${CurrencySymbol} ${number}`
+  | `${number}${Lowercase<CurrencyCode>}`
+  | `${number} ${Lowercase<CurrencyCode>}`
+  | `${number}${CurrencyCode}`
+  | `${number} ${CurrencyCode}`;
+
+type M = Money | ChainedMoneyV2;
+
 export type ChainedMoneyV2 = {
   // --- Comparison ---
 
@@ -289,37 +315,37 @@ export type ChainedMoneyV2 = {
    * Compare two Money objects
    * @example m1.compare(m2) -> 1
    */
-  cmp: (m: Money | ChainedMoneyV2) => 1 | 0 | -1;
+  cmp: (m: M) => 1 | 0 | -1;
 
   /**
    * Check if two Money objects are equal
    * @example m1.equals(m2) -> false
    */
-  eq: (m: Money | ChainedMoneyV2) => boolean;
+  eq: (m: M) => boolean;
 
   /**
    * Check if a Money object is greater than another
    * @example m1.greaterThan(m1) -> true
    */
-  gt: (m: Money | ChainedMoneyV2) => boolean;
+  gt: (m: M) => boolean;
 
   /**
    * Check if a Money object is greater than or equal to another
    * @example greaterThanOrEqual(m1, m2) -> true
    */
-  gte: (m: Money | ChainedMoneyV2) => boolean;
+  gte: (m: M) => boolean;
 
   /**
    * Check if a Money object is less than another
    * @example lessThan(m1, m2) -> false
    */
-  lt: (m: Money | ChainedMoneyV2) => boolean;
+  lt: (m: M) => boolean;
 
   /**
    * Check if a Money object is less than or equal to another
    * @example lessThanOrEqual(m1, m2) -> true
    */
-  lte: (m: Money | ChainedMoneyV2) => boolean;
+  lte: (m: M) => boolean;
 
   /**
    * Check if a Money object is zero
@@ -343,19 +369,13 @@ export type ChainedMoneyV2 = {
    * Return the smallest of multiple Money objects
    * @example min(m1, m2, m3, ...) -> m2
    */
-  min: (
-    m1: Money | ChainedMoneyV2,
-    ...m: (Money | ChainedMoneyV2)[]
-  ) => ChainedMoneyV2;
+  min: (m1: M, ...m: M[]) => ChainedMoneyV2;
 
   /**
    * Return the largest of multiple Money objects
    * @example max(m1, m2, m3, ...) -> m3
    */
-  max: (
-    m1: Money | ChainedMoneyV2,
-    ...m: (Money | ChainedMoneyV2)[]
-  ) => ChainedMoneyV2;
+  max: (m1: M, ...m: M[]) => ChainedMoneyV2;
 
   // --- Validation ---
 
@@ -383,20 +403,14 @@ export type ChainedMoneyV2 = {
    * TODO: add support for multiple arguments to return sum of all (add(m1, m2, m3, ...)
    * @example m1.add(m2) -> m3
    */
-  add: (
-    m1: Money | ChainedMoneyV2,
-    ...m: (Money | ChainedMoneyV2)[]
-  ) => ChainedMoneyV2;
+  add: (m1: M, ...m: M[]) => ChainedMoneyV2;
 
   /**
    * Subtract two Money objects
    * TODO: add support for multiple arguments to return diff of all (subtract(m1, m2, m3, ...)
    * @example m1.subtract(m2) -> m3
    */
-  sub: (
-    m1: Money | ChainedMoneyV2,
-    ...m: (Money | ChainedMoneyV2)[]
-  ) => ChainedMoneyV2;
+  sub: (m1: M, ...m: M[]) => ChainedMoneyV2;
 
   /**
    * Multiply a Money object by a number

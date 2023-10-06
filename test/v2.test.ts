@@ -1,10 +1,10 @@
 import assert from "node:assert";
 import { describe, test } from "bun:test";
 
-import { setupV2 } from "../lib/v2";
+import { setup } from "../v2";
 
 describe("v2", () => {
-  const { money } = setupV2({
+  const { money } = setup({
     currencies: [
       {
         code: "EUR" as const,
@@ -49,7 +49,9 @@ describe("v2", () => {
     money("🎃 15");
     money("15 spooky");
 
-    // money("200uah"); // should not compile
+    // should not compile:
+    // money("200uah");
+    // money("100 btc").sub("14 foo");
   });
 
   describe("basic use cased", () => {
@@ -112,25 +114,27 @@ describe("v2", () => {
   describe("arithmetics", () => {
     test("add", () => {
       assert.ok(
-        Bun.deepEquals(money(100.42).add(money(100.42)).json(), {
+        Bun.deepEquals(money(100.42).add(100.42).json(), {
           currency: "EUR",
           amount: 20084,
         })
       );
     });
 
-    test("add many ", () => {
-      assert.ok(
-        Bun.deepEquals(money("0.01").add(money(0.02), { amount: 3 }).json(), {
-          currency: "EUR",
-          amount: 6,
-        })
+    test("add many", () => {
+      const foo = money(0.01);
+      const bar = money("0.01eur");
+      assert.equal(
+        money("0.01")
+          .add("0.02", { amount: 3 }, foo, "0.02", money("0.01"), money(0.01))
+          .number(),
+        0.11
       );
     });
 
     test("sub", () => {
       assert.ok(
-        Bun.deepEquals(money("100.42").sub(money(100.42)).json(), {
+        Bun.deepEquals(money("100.42").sub(100.42).json(), {
           currency: "EUR",
           amount: 0,
         })
@@ -146,7 +150,7 @@ describe("v2", () => {
     test("sub many", () => {
       assert.ok(
         Bun.deepEquals(
-          money("0.06").sub({ amount: 3 }, money(0.02), money(0.01)).json(),
+          money("0.06").sub({ amount: 3 }, 0.02, money(0.01)).json(),
           { currency: "EUR", amount: 0 }
         )
       );
@@ -306,13 +310,7 @@ describe("v2", () => {
         }),
         0
       );
-      assert.strictEqual(
-        money(100.42).cmp({
-          currency: "EUR",
-          amount: 10041,
-        }),
-        1
-      );
+      assert.strictEqual(money(100.42).cmp(money(100.41)), 1);
       assert.strictEqual(
         money(100.42).cmp({
           currency: "EUR",

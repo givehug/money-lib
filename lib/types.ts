@@ -1,3 +1,5 @@
+export const symbolChain = Symbol("moneyChainV2");
+
 export type Cents = number;
 
 export type Money = {
@@ -282,13 +284,13 @@ export type ChainedMoney = {
   toFloatString: () => string;
 };
 
-export type ConfigV2 = {
+export type ConfigV2<CC extends string, CS extends string> = {
   currencies: Array<{
-    code: string;
-    symbol: string;
+    code: CC;
+    symbol: CS;
     scale: number;
   }>;
-  defaultCurrency: string;
+  defaultCurrency: CC;
   defaultRoundingMethod: "bankers" | "up" | "down" | "round";
 };
 
@@ -306,46 +308,48 @@ export type MoneyV2<
   | `${number}${CurrencyCode}`
   | `${number} ${CurrencyCode}`;
 
-type M = Money | ChainedMoneyV2;
+type MC<CC extends string, CS extends string> =
+  | MoneyV2<CC, CS>
+  | ChainedMoneyV2<CC, CS>;
 
-export type ChainedMoneyV2 = {
+export type ChainedMoneyV2<CC extends string, CS extends string> = {
   // --- Comparison ---
 
   /**
    * Compare two Money objects
    * @example m1.compare(m2) -> 1
    */
-  cmp: (m: M) => 1 | 0 | -1;
+  cmp: (m: MC<CC, CS>) => 1 | 0 | -1;
 
   /**
    * Check if two Money objects are equal
    * @example m1.equals(m2) -> false
    */
-  eq: (m: M) => boolean;
+  eq: (m: MC<CC, CS>) => boolean;
 
   /**
    * Check if a Money object is greater than another
    * @example m1.greaterThan(m1) -> true
    */
-  gt: (m: M) => boolean;
+  gt: (m: MC<CC, CS>) => boolean;
 
   /**
    * Check if a Money object is greater than or equal to another
    * @example greaterThanOrEqual(m1, m2) -> true
    */
-  gte: (m: M) => boolean;
+  gte: (m: MC<CC, CS>) => boolean;
 
   /**
    * Check if a Money object is less than another
    * @example lessThan(m1, m2) -> false
    */
-  lt: (m: M) => boolean;
+  lt: (m: MC<CC, CS>) => boolean;
 
   /**
    * Check if a Money object is less than or equal to another
    * @example lessThanOrEqual(m1, m2) -> true
    */
-  lte: (m: M) => boolean;
+  lte: (m: MC<CC, CS>) => boolean;
 
   /**
    * Check if a Money object is zero
@@ -369,13 +373,13 @@ export type ChainedMoneyV2 = {
    * Return the smallest of multiple Money objects
    * @example min(m1, m2, m3, ...) -> m2
    */
-  min: (m1: M, ...m: M[]) => ChainedMoneyV2;
+  min: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
 
   /**
    * Return the largest of multiple Money objects
    * @example max(m1, m2, m3, ...) -> m3
    */
-  max: (m1: M, ...m: M[]) => ChainedMoneyV2;
+  max: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
 
   // --- Validation ---
 
@@ -403,34 +407,40 @@ export type ChainedMoneyV2 = {
    * TODO: add support for multiple arguments to return sum of all (add(m1, m2, m3, ...)
    * @example m1.add(m2) -> m3
    */
-  add: (m1: M, ...m: M[]) => ChainedMoneyV2;
+  add: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
 
   /**
    * Subtract two Money objects
    * TODO: add support for multiple arguments to return diff of all (subtract(m1, m2, m3, ...)
    * @example m1.subtract(m2) -> m3
    */
-  sub: (m1: M, ...m: M[]) => ChainedMoneyV2;
+  sub: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
 
   /**
    * Multiply a Money object by a number
    * TODO(maybe): multiply money by money, eg m1.multiply(m2)
    * @example m.multiply(2) -> m2
    */
-  mul: (multiplier: number, round?: (n: number) => number) => ChainedMoneyV2;
+  mul: (
+    multiplier: number,
+    round?: (n: number) => number
+  ) => ChainedMoneyV2<CC, CS>;
 
   /**
    * Divide a Money object by a number
    * TODO(maybe): divide money by money, eg m1.divide(m2)
    * @example m.divide(2) -> m2
    */
-  div: (divider: number, round?: (n: number) => number) => ChainedMoneyV2;
+  div: (
+    divider: number,
+    round?: (n: number) => number
+  ) => ChainedMoneyV2<CC, CS>;
 
   /**
    * Return the absolute value of a Money object
    * @example money({amount: -100}) -> Money{amount: 100}
    */
-  abs: () => ChainedMoneyV2;
+  abs: () => ChainedMoneyV2<CC, CS>;
 
   // --- Formatting ---
 
@@ -478,7 +488,7 @@ export type ChainedMoneyV2 = {
     currency: string,
     locale?: string,
     decimalSeparator?: "." | ","
-  ) => ChainedMoneyV2;
+  ) => ChainedMoneyV2<CC, CS>;
 
   // --- Debug ---
 
@@ -486,7 +496,7 @@ export type ChainedMoneyV2 = {
    * Log a Money object to the console
    * @example debug("money:") -> "money: Money{amount: 100, currency: "EUR"}"
    */
-  debug: (prefix?: string) => ChainedMoneyV2;
+  debug: (prefix?: string) => ChainedMoneyV2<CC, CS>;
 
   // --- Serialization ---
 
@@ -528,4 +538,6 @@ export type ChainedMoneyV2 = {
    * @example money({amount: 10000}).toFloatString() -> "100.00"
    */
   string: () => string;
+
+  [symbolChain]: true;
 };

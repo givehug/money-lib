@@ -32,7 +32,7 @@ import {
   abs,
 } from "./money";
 
-import type { ChainedMoney, ChainedMoneyV2, Cents, Money } from "./types";
+import type { ChainedMoney, Cents, Money } from "./types";
 
 // unwrap Money from chain, or init with zero value
 const unwrap = (m: Money | ChainedMoney): Money => {
@@ -45,7 +45,6 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   _m.currency = _m.currency || config.defaultCurrency;
 
   return {
-    // Not in V2
     zero: () => moneyChain(zero()),
     fromInt: (amount: Cents, currency?: string) =>
       moneyChain(fromInt(amount, currency)),
@@ -136,94 +135,5 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 };
 
 moneyChain.config = setConfig;
-
-// unwrap Money from chain, or init with zero value
-const unwrapV2 = (m: Money | ChainedMoneyV2): Money => {
-  return isValid(m) ? m : m.json();
-};
-
-// Helper wrapper to allow chaining
-export const moneyChainV2 = (
-  money: Money | ChainedMoneyV2 = zero()
-): ChainedMoneyV2 => {
-  const _m = unwrapV2(money);
-  _m.currency = _m.currency || config.defaultCurrency;
-
-  return {
-    int: () => toInt(_m),
-
-    cents: () => toInt(_m),
-    float: () => toFloat(_m),
-    number: () => toFloat(_m),
-
-    string: () => toFloatString(_m),
-    centStr: () => toString(_m),
-
-    cmp: (m: Money | ChainedMoneyV2) => compare(_m, unwrapV2(m)),
-
-    eq: (m: Money | ChainedMoneyV2) => equals(_m, unwrapV2(m)),
-
-    gt: (m: Money | ChainedMoneyV2) => greaterThan(_m, unwrapV2(m)),
-
-    gte: (m: Money | ChainedMoneyV2) => greaterThanOrEqual(_m, unwrapV2(m)),
-
-    lt: (m: Money | ChainedMoneyV2) => lessThan(_m, unwrapV2(m)),
-
-    lte: (m: Money | ChainedMoneyV2) => lessThanOrEqual(_m, unwrapV2(m)),
-
-    is0: () => isZero(_m),
-
-    isPos: () => isPositive(_m),
-
-    isNeg: () => isNegative(_m),
-
-    min: (m1: Money | ChainedMoneyV2, ...m: (Money | ChainedMoneyV2)[]) =>
-      moneyChainV2(min(unwrapV2(m1), ...m.map(unwrapV2))),
-
-    max: (m1: Money | ChainedMoneyV2, ...m: (Money | ChainedMoneyV2)[]) =>
-      moneyChainV2(max(unwrapV2(m1), ...m.map(unwrapV2))),
-
-    validate: () => isValid(_m),
-
-    split: () => split(_m),
-
-    add: (m1: Money | ChainedMoneyV2, ...m: (Money | ChainedMoneyV2)[]) =>
-      moneyChainV2(add(_m, unwrapV2(m1), ...m.map(unwrapV2))),
-
-    sub: (m1: Money | ChainedMoneyV2, ...m: (Money | ChainedMoneyV2)[]) =>
-      moneyChainV2(subtract(_m, unwrapV2(m1), ...m.map(unwrapV2))),
-
-    mul: (multiplier: number, round = Math.round) =>
-      moneyChainV2(multiply(_m, multiplier, round)),
-
-    div: (divider: number, round = Math.round) =>
-      moneyChainV2(divide(_m, divider, round)),
-
-    abs: () => moneyChainV2(abs(_m)),
-
-    fmt: (ops?: {
-      locale?: string;
-      cents?: boolean;
-      withPlusSign?: boolean;
-      trailingZeros?: boolean;
-    }) => format(_m, ops),
-
-    fmts: (locale?: string) => formatParts(_m, locale),
-
-    parse: (
-      s: string,
-      currency: string,
-      locale?: string,
-      decimalSeparator?: "." | ","
-    ) => moneyChainV2(parse(s, currency, locale, decimalSeparator)),
-
-    debug: (prefix = "money:") => {
-      console.log(prefix, _m);
-      return moneyChainV2(_m);
-    },
-
-    json: () => _m,
-  };
-};
 
 export default moneyChain;

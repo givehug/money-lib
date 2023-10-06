@@ -1,13 +1,7 @@
-import * as money from "./money";
-import {
-  symbolChain,
-  type ChainedMoneyV2,
-  type ConfigV2,
-  type Money,
-  type MoneyV2,
-} from "./types";
-
-import { setConfig, config as defaultConfig } from "./config";
+import * as money from "./core";
+import type { ChainedMoneyV2, ConfigV2, Money, MoneyV2 } from "./types";
+import { symbolChain } from "./types";
+import { setConfig, config } from "./config";
 
 const isMoneyChain = (m: any): m is ChainedMoneyV2<any, any> => {
   return typeof m === "object" && symbolChain in m;
@@ -25,23 +19,20 @@ const parseMoney = <CC extends string, CS extends string>(
   }
 
   if (typeof input === "number") {
-    return money.fromFloat(input, defaultConfig.defaultCurrency);
+    return money.fromFloat(input, config.defaultCurrency);
   }
 
   const stringInput = input.trim().toLocaleUpperCase();
 
   const amount = parseFloat(stringInput.replace(/[^-0-9.]/g, "")) || 0;
 
-  const currencies = Object.values(defaultConfig.currencies);
+  const currencies = Object.values(config.currencies);
 
   const currency =
     currencies.find((c) => stringInput.startsWith(c.symbol)) ||
     currencies.find((c) => stringInput.endsWith(c.code));
 
-  return money.fromFloat(
-    amount,
-    currency?.code ?? defaultConfig.defaultCurrency
-  );
+  return money.fromFloat(amount, currency?.code ?? config.defaultCurrency);
 };
 
 export const moneyChain = <CC extends string, CS extends string>(
@@ -52,7 +43,7 @@ export const moneyChain = <CC extends string, CS extends string>(
   const parse = parseMoney<CC, CS>;
   const _m = parseMoney(input);
 
-  _m.currency = currency || _m.currency || defaultConfig.defaultCurrency;
+  _m.currency = currency || _m.currency || config.defaultCurrency;
 
   const _chain: ChainedMoneyV2<CC, CS> = {
     int: () => money.toInt(_m),
@@ -132,24 +123,22 @@ export const moneyChain = <CC extends string, CS extends string>(
 };
 
 export const setupMoney = <CC extends string, CS extends string>(
-  config?: ConfigV2<CC, CS>
+  cfg: ConfigV2<CC, CS>
 ) => {
-  if (config) {
-    setConfig({
-      defaultCurrency: config.defaultCurrency,
-      defaultRoundingMethod: config.defaultRoundingMethod,
-      currencies: Object.fromEntries(
-        config.currencies.map((c) => [
-          c.code,
-          {
-            code: c.code,
-            symbol: c.symbol,
-            precision: c.scale,
-          },
-        ])
-      ),
-    });
-  }
+  setConfig({
+    defaultCurrency: cfg.defaultCurrency,
+    defaultRoundingMethod: cfg.defaultRoundingMethod,
+    currencies: Object.fromEntries(
+      cfg.currencies.map((c) => [
+        c.code,
+        {
+          code: c.code,
+          symbol: c.symbol,
+          precision: c.scale,
+        },
+      ])
+    ),
+  });
 
   return {
     money: moneyChain<CC, CS>,

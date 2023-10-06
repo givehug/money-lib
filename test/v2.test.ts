@@ -1,36 +1,10 @@
 import assert from "node:assert";
 import { describe, test } from "bun:test";
 
-import { setupMoney } from "../v2";
+import { setupMoney, money } from "../v2";
+import { defaultConfig } from "../lib/config";
 
 describe("v2", () => {
-  const { money } = setupMoney({
-    currencies: [
-      {
-        code: "EUR" as const,
-        symbol: "€" as const,
-        scale: 2,
-      },
-      {
-        code: "USD" as const,
-        symbol: "$" as const,
-        scale: 2,
-      },
-      {
-        code: "BTC" as const,
-        symbol: "₿" as const,
-        scale: 8,
-      },
-      {
-        code: "SPOOKY" as const,
-        symbol: "🎃" as const,
-        scale: 5,
-      },
-    ],
-    defaultCurrency: "EUR" as const,
-    defaultRoundingMethod: "bankers",
-  });
-
   test("different initializers", () => {
     money(100);
     money(100, "EUR");
@@ -46,10 +20,10 @@ describe("v2", () => {
     money("100usd");
     money("100USD");
     money("100 btc");
-    money("🎃 15");
-    money("15 spooky");
 
-    // should not compile:
+    // must not compile:
+    // money("🎃 15");
+    // money("15 spooky");
     // money("200uah");
     // money("100 btc").sub("14 foo");
   });
@@ -428,11 +402,6 @@ describe("v2", () => {
       //   "€1,000.42"
       // );
       assert.equal(money(0.01).fmt(), "€0,01");
-      assert.equal(money("🎃 -10.61").fmt(), "-🎃10,61000");
-      assert.equal(
-        money("0.15 spooky").fmt({ trailingZeros: false }),
-        "🎃0,15"
-      );
     });
 
     test("fmt negative amount", () => {
@@ -537,5 +506,41 @@ describe("v2", () => {
         expected
       );
     });
+  });
+
+  describe("custom config", () => {
+    const { money: moneyCustom } = setupMoney({
+      currencies: [
+        {
+          code: "EUR" as const,
+          symbol: "€" as const,
+          scale: 2,
+        },
+        {
+          code: "BTC" as const,
+          symbol: "₿" as const,
+          scale: 8,
+        },
+        {
+          code: "SPOOKY" as const,
+          symbol: "🎃" as const,
+          scale: 5,
+        },
+      ],
+      defaultCurrency: "EUR" as const,
+      defaultRoundingMethod: "bankers",
+    });
+
+    assert.equal(moneyCustom("-10.61eur").fmt(), "-€10,61000");
+    assert.equal(moneyCustom("🎃 -10.61").fmt(), "-🎃10,61000");
+    assert.equal(
+      moneyCustom("0.15 spooky").fmt({ trailingZeros: false }),
+      "🎃0,15"
+    );
+
+    // must not compile
+    // assert.equal(moneyCustom("-10.61pund").fmt(), "-€10,61000");
+
+    setupMoney(defaultConfig);
   });
 });

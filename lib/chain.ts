@@ -30,7 +30,7 @@ import {
   min,
   max,
   abs,
-} from "./money";
+} from "./core";
 
 import type { ChainedMoney, Cents, Money } from "./types";
 

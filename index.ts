@@ -43,6 +43,6 @@ export {
 
   // Parsing
   parse,
-} from "./lib/money";
+} from "./lib/core";
 
 export { setConfig } from "./lib/config";

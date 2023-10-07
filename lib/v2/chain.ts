@@ -1,48 +1,18 @@
-import * as money from "./core";
-import type { ChainedMoneyV2, ConfigV2, Money, MoneyV2 } from "./types";
+import * as money from "../core";
+import type { Money } from "../types";
+import type { ChainedMoneyV2, ConfigV2, MoneyV2 } from "./types";
 import { symbolChain } from "./types";
-import { setConfig, config } from "./config";
-
-const isMoneyChain = (m: any): m is ChainedMoneyV2<any, any> => {
-  return typeof m === "object" && symbolChain in m;
-};
-
-const parseMoney = <CC extends string, CS extends string>(
-  input: MoneyV2<CC, CS> | ChainedMoneyV2<CC, CS>
-): Money => {
-  if (isMoneyChain(input)) {
-    return input.json();
-  }
-
-  if (money.isValid(input)) {
-    return input;
-  }
-
-  if (typeof input === "number") {
-    return money.fromFloat(input, config.defaultCurrency);
-  }
-
-  const stringInput = input.trim().toLocaleUpperCase();
-
-  const amount = parseFloat(stringInput.replace(/[^-0-9.]/g, "")) || 0;
-
-  const currencies = Object.values(config.currencies);
-
-  const currency =
-    currencies.find((c) => stringInput.startsWith(c.symbol)) ||
-    currencies.find((c) => stringInput.endsWith(c.code));
-
-  return money.fromFloat(amount, currency?.code ?? config.defaultCurrency);
-};
+import { setConfig, config } from "../config";
+import { parseMoneyInput } from "./helpers";
 
 export const moneyChain = <CC extends string, CS extends string>(
   input: MoneyV2<CC, CS> | ChainedMoneyV2<CC, CS>,
   currency?: CC | Lowercase<CC>
 ): ChainedMoneyV2<CC, CS> => {
   const nextChain = moneyChain<CC, CS>;
-  const parse = parseMoney<CC, CS>;
-  const _m = parseMoney(input);
+  const parse = parseMoneyInput<CC, CS>;
 
+  const _m = parse(input);
   _m.currency = currency || _m.currency || config.defaultCurrency;
 
   const _chain: ChainedMoneyV2<CC, CS> = {
@@ -78,7 +48,13 @@ export const moneyChain = <CC extends string, CS extends string>(
 
     validate: () => money.isValid(_m),
 
-    split: () => money.split(_m),
+    split: () => {
+      const split = money.split(_m);
+      return {
+        base: split.whole,
+        cents: split.cents,
+      };
+    },
 
     add: (m1, ...m) => nextChain(money.add(_m, parse(m1), ...m.map(parse))),
 

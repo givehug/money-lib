@@ -21,11 +21,18 @@ describe("v2", () => {
     money("100USD");
     money("100 btc");
 
+    // money("#50.59");
+    // money("100 btc").sub("14 foo");
+
+    assert.equal(
+      money("100 eur").add("€57.99").sub(7.99).mul(5.56399).div(5.56399).fmt(),
+      "€150,00"
+    );
+
     // must not compile:
     // money("🎃 15");
     // money("15 spooky");
     // money("200uah");
-    // money("100 btc").sub("14 foo");
   });
 
   describe("basic use cased", () => {

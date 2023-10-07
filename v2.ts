@@ -1,6 +1,4 @@
-export type { Money, Cents } from "./lib/types";
-
-import * as v2 from "./lib/chainV2";
+import * as v2 from "./lib/v2/chain";
 import { defaultConfig } from "./lib/config";
 
 export const { money } = v2.setupMoney(defaultConfig);

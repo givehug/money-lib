@@ -74,193 +74,115 @@ console.log(money.format(finalBalance)); // €138.269,60
 ### API
 
 ```ts
-{
-  /**
-   * Compare
-   */
-  cmp: (m: MC<CC, CS>) => 1 | 0 | -1;
+// Compare
+cmp: (m) => 1 | 0 | -1;
 
-  /**
-   * Equal
-   */
-  eq: (m: MC<CC, CS>) => boolean;
+// Equal
+eq: (m) => boolean;
 
-  /**
-   * Greater than
-   */
-  gt: (m: MC<CC, CS>) => boolean;
+// Greater than
+gt: (m) => boolean;
 
-  /**
-   * Greater than or equal
-   */
-  gte: (m: MC<CC, CS>) => boolean;
+// Greater than or equal
+gte: (m) => boolean;
 
-  /**
-   * Less than
-   */
-  lt: (m: MC<CC, CS>) => boolean;
+// Less than
+lt: (m) => boolean;
 
-  /**
-   * Less than or equal
-   */
-  lte: (m: MC<CC, CS>) => boolean;
+// Less than or equal
+lte: (m) => boolean;
 
-  /**
-   * Check if a Money is zero
-   */
-  is0: () => boolean;
+// Check if a Money is zero
+is0: () => boolean;
 
-  /**
-   * Check if a Money is positive
-   */
-  isPos: () => boolean;
+// Check if a Money is positive
+isPos: () => boolean;
 
-  /**
-   * Check if a Money is negative
-   */
-  isNeg: () => boolean;
+// Check if a Money is negative
+isNeg: () => boolean;
 
-  /**
-   * Get min from multiple Money inputs
-   */
-  min: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
+// Get min from multiple Money inputs
+min: (...m) => m;
 
-  /**
-   * Get max from multiple Money inputs
-   */
-  max: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
+// Get max from multiple Money inputs
+max: (...m) => m;
 
-  /**
-   * Check if a Money is valid
-   */
-  validate: () => boolean;
+// Check if a Money is valid
+validate: () => boolean;
 
-  /**
-   * Split Money into a whole and cents part
-   */
-  split: () => {
-    base: number;
-    cents: number;
-  };
+// Split Money into a whole and cents part
+split: () => {
+  base: number;
+  cents: number;
+};
 
-  /**
-   * Add multiple Money inputs
-   */
-  add: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
+// Add multiple Money inputs
+add: (...m) => m;
 
-  /**
-   * Subtract multiple Money inputs
-   */
-  sub: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
+// Subtract multiple Money inputs
+sub: (...m) => m;
 
-  /**
-   * Multiply Money by a number
-   */
-  mul: (
-    multiplier: number,
-    round?: (n: number) => number
-  ) => ChainedMoneyV2<CC, CS>;
+// Multiply Money by a number
+mul: (multiplier: number, round?: (n: number) => number) => m;
 
-  /**
-   * Divide Money by a number
-   */
-  div: (
-    divider: number,
-    round?: (n: number) => number
-  ) => ChainedMoneyV2<CC, CS>;
+// Divide Money by a number
+div: (divider: number, round?: (n: number) => number) => m;
 
-  /**
-   * Return the absolute value of a Money
-   */
-  abs: () => ChainedMoneyV2<CC, CS>;
+// Return the absolute value of a Money
+abs: () => m;
 
-  /**
-   * Format Money
-   */
-  fmt: (ops?: {
-    locale?: string;
-    /**
-     * default: true; if false, 00 cents will be omitted
-     */
-    cents?: boolean;
-    /**
-     * default: true; if false, 1.50 will be formatted as 1.5
-     */
-    trailingZeros?: boolean;
-    /**
-     * default: false; if true, positive numbers will be prefixed with a plus sign
-     */
-    withPlusSign?: boolean;
-  }) => string;
+// Format Money
+fmt: (ops?: {
+  locale?: string;
+  cents?: boolean;
+  trailingZeros?: boolean;
+  withPlusSign?: boolean;
+}) => string;
 
-  /**
-   * Advanced Money formatter
-   */
-  fmts: (locale?: string) => {
-    whole: string;
-    wholeFormatted: string;
-    cents: string;
-    currencySymbol: string;
-    decimalSeparator: string;
-    sign: "+" | "-" | "";
-  };
+// Advanced Money formatter
+fmts: (locale?: string) => {
+  whole: string;
+  wholeFormatted: string;
+  cents: string;
+  currencySymbol: string;
+  decimalSeparator: string;
+  sign: "+" | "-" | "";
+};
 
-  /**
-   * Parse a string into a Money object
-   */
-  parse: (
-    s: string,
-    currency: string,
-    locale?: string,
-    decimalSeparator?: "." | ","
-  ) => ChainedMoneyV2<CC, CS>;
+// Parse a string into a Money object
+parse: (
+  s: string,
+  currency: string,
+  locale?: string,
+  decimalSeparator?: "." | ","
+) => m;
 
-  /**
-   * Log a Money object to the console
-   */
-  debug: (prefix?: string) => ChainedMoneyV2<CC, CS>;
+// Log a Money object to the console
+debug: (prefix?: string) => m;
 
-  /**
-   * Return the Money object
-   */
-  json: () => Money;
+// Return the Money object
+json: () => Money;
 
-  /**
-   * Return the Money object as an int
-   */
-  int: () => Cents;
+// Return the Money object as an int
+int: () => Cents;
 
-  /**
-   * Return the Money object as an int (alias for toInt)
-   */
-  cents: () => Cents;
+// Return the Money object as an int (alias for toInt)
+cents: () => Cents;
 
-  /**
-   * Return the Money object as a float
-   */
-  number: () => number;
+// Return the Money object as a float
+number: () => number;
 
-  /**
-   * Return the Money object as a float (alias for number())
-   */
-  float: () => number;
+// Return the Money object as a float (alias for number())
+float: () => number;
 
-  /**
-   * Return the Money object as a string
-   */
-  centStr: () => string;
+// Return the Money object as a string
+centStr: () => string;
 
-  /**
-   * Return the Money object as a string
-   */
-  string: () => string;
-
-  [symbolChain]: true;
-}
+// Return the Money object as a string
+string: () => string;
 ```
 
 ### TODO
 
 - big numbers
 - support fractions with more than 2 digits eg 1.9999 euros (currently rounds to 2 decimals) (eg for stock prices etc)
-- simplified api

@@ -8,6 +8,11 @@ This is V2 API. V1 docs are [here](docs/README_V1.md).
 
 <br/>
 
+<p>
+  <img src="docs/init.gif" width="550" >
+</p>
+<br/>
+
 Simple API
 
 <p>

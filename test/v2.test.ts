@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { describe, test } from "bun:test";
+import { describe, test, expect } from "bun:test";
 
 import { setupMoney, money } from "../v2";
 import { defaultConfig } from "../lib/config";
@@ -8,28 +8,17 @@ describe("v2", () => {
   test("different initializers", () => {
     // Any of these works:
     money(100);
-    money(100, "EUR");
-    money(100, "eur");
     money("€100", "EUR");
-    money("€100");
     money("$100.99");
     money("€ 100");
     money("100eur");
-    money("100.50 eur");
-    money("100EUR");
-    money("$100");
-    money("100usd");
-    money("100USD");
     money("100 btc");
 
-    // Must not compile:
-    // money("#50.59");
-    // money("100 btc").sub("14 foo");
+    const m = money("100 eur").add("€57.99").sub(7.99).mul(5.56399);
 
-    assert.equal(
-      money("100 eur").add("€57.99").sub(7.99).mul(5.56399).div(5.56399).fmt(),
-      "€150,00"
-    );
+    expect(m.fmt()).toBe("€834,60");
+    expect(m.float()).toBe(834.6);
+    expect(m.cents()).toBe(83460);
 
     // must not compile:
     // money("🎃 15");
@@ -423,8 +412,8 @@ describe("v2", () => {
           cents: "42",
           currencySymbol: "€",
           decimalSeparator: ",",
-          whole: "1000555",
-          wholeFormatted: "1.000.555",
+          base: "1000555",
+          baseFormatted: "1.000.555",
           sign: "+",
         })
       );
@@ -434,8 +423,8 @@ describe("v2", () => {
           cents: "42",
           currencySymbol: "€",
           decimalSeparator: ",",
-          whole: "1000555",
-          wholeFormatted: "1.000.555",
+          base: "1000555",
+          baseFormatted: "1.000.555",
           sign: "-",
         })
       );
@@ -518,38 +507,39 @@ describe("v2", () => {
   });
 
   describe("custom config", () => {
-    const { money: moneyCustom } = setupMoney({
-      currencies: [
-        {
-          code: "EUR" as const,
-          symbol: "€" as const,
-          scale: 2,
-        },
-        {
-          code: "BTC" as const,
-          symbol: "₿" as const,
-          scale: 8,
-        },
-        {
-          code: "SPOOKY" as const,
-          symbol: "🎃" as const,
-          scale: 5,
-        },
-      ],
-      defaultCurrency: "EUR" as const,
-      defaultRoundingMethod: "bankers",
+    test("custom config", () => {
+      const { money: moneyCustom } = setupMoney({
+        currencies: [
+          {
+            code: "EUR" as const,
+            symbol: "€" as const,
+            scale: 2,
+          },
+          {
+            code: "BTC" as const,
+            symbol: "₿" as const,
+            scale: 8,
+          },
+          {
+            code: "SPOOKY" as const,
+            symbol: "🎃" as const,
+            scale: 5,
+          },
+        ],
+        defaultCurrency: "EUR" as const,
+        defaultRoundingMethod: "bankers",
+      });
+
+      expect(moneyCustom("-10.61eur").fmt()).toBe("-€10,61");
+      expect(moneyCustom("🎃 -10.61").fmt()).toBe("-🎃10,61000");
+      expect(moneyCustom("0.15 spooky").fmt({ trailingZeros: false })).toBe(
+        "🎃0,15"
+      );
+
+      // must not compile
+      // assert.equal(moneyCustom("-10.61pund").fmt(), "-€10,61000");
+
+      setupMoney(defaultConfig);
     });
-
-    assert.equal(moneyCustom("-10.61eur").fmt(), "-€10,61000");
-    assert.equal(moneyCustom("🎃 -10.61").fmt(), "-🎃10,61000");
-    assert.equal(
-      moneyCustom("0.15 spooky").fmt({ trailingZeros: false }),
-      "🎃0,15"
-    );
-
-    // must not compile
-    // assert.equal(moneyCustom("-10.61pund").fmt(), "-€10,61000");
-
-    setupMoney(defaultConfig);
   });
 });

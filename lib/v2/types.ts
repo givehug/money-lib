@@ -98,8 +98,8 @@ export type ChainedMoneyV2<CC extends string, CS extends string> = {
   // --- Transformation ---
 
   /**
-   * Split Money into a whole and cents part
-   * @example split(m) -> { whole: 1, cents: 50 }
+   * Split Money into a base and cents part
+   * @example split(m) -> { base: 1, cents: 50 }
    */
   split: () => {
     base: number;
@@ -164,8 +164,8 @@ export type ChainedMoneyV2<CC extends string, CS extends string> = {
    * Advanced Money formatter
    */
   fmts: (locale?: string) => {
-    whole: string;
-    wholeFormatted: string;
+    base: string;
+    baseFormatted: string;
     cents: string;
     currencySymbol: string;
     decimalSeparator: string;

@@ -5,6 +5,9 @@ import { symbolChain } from "./types";
 import { setConfig, config } from "../config";
 import { parseMoneyInput } from "./helpers";
 
+/**
+ * @beta This is an beta API V2.
+ */
 export const moneyChain = <CC extends string, CS extends string>(
   input: MoneyV2<CC, CS> | ChainedMoneyV2<CC, CS>,
   currency?: CC | Lowercase<CC>
@@ -76,7 +79,17 @@ export const moneyChain = <CC extends string, CS extends string>(
       trailingZeros?: boolean;
     }) => money.format(_m, ops),
 
-    fmts: (locale?: string) => money.formatParts(_m, locale),
+    fmts: (locale?: string) => {
+      const fmtd = money.formatParts(_m, locale);
+      return {
+        base: fmtd.whole,
+        cents: fmtd.cents,
+        baseFormatted: fmtd.wholeFormatted,
+        currencySymbol: fmtd.currencySymbol,
+        decimalSeparator: fmtd.decimalSeparator,
+        sign: fmtd.sign,
+      };
+    },
 
     parse: (
       s: string,
@@ -86,7 +99,10 @@ export const moneyChain = <CC extends string, CS extends string>(
     ) => nextChain(money.parse(s, currency, locale, decimalSeparator)),
 
     debug: (prefix = "money:") => {
-      console.log(prefix, _m);
+      console.log(prefix, {
+        cents: _m.amount,
+        currency: _m.currency,
+      });
       return nextChain(_m);
     },
 

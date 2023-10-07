@@ -51,7 +51,7 @@ money("0.15 spooky").fmt({ trailingZeros: false }); // "🎃0,15"
 <br/>
 
 <details>
-  <summary>or as standalone functions</summary>
+  <summary>standalone utils</summary>
 
 ```ts
 import * as money from "money-lib/utils";

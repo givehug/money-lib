@@ -39,7 +39,10 @@ const unwrap = (m: Money | ChainedMoney): Money => {
   return isValid(m) ? m : m.toJSON();
 };
 
-// Helper wrapper to allow chaining
+/**
+ * @deprecated Use V2
+ * @example import { money } from "money-lib/v2"
+ */
 const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   const _m = unwrap(money);
   _m.currency = _m.currency || config.defaultCurrency;

@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.0.0-beta.0 (2023-10-07)
+
+non-breaking
+
+- V1 still available, import from "money-lib"
+- V2 import from "money-lib/v2"
+- simplified API
+- type safe string literal initialization
+
 ## v1.6.4 (2023-09-09)
 
 #### Fix

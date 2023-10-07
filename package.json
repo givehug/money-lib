@@ -1,12 +1,12 @@
 {
   "name": "money-lib",
-  "version": "1.6.4",
-  "description": "Simple TypeScript library to work with money",
+  "version": "2.0.0-beta.0",
+  "description": "TypeScript library to work with money",
   "main": "dist/index.js",
   "scripts": {
     "test": "bun test",
     "build": "tsc --project tsconfig.build.json",
-    "release": "npm run build && npm publish"
+    "release": "bun build && bun publish"
   },
   "repository": {
     "type": "git",

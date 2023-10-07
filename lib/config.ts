@@ -41,6 +41,11 @@ export const defaultConfig = {
       scale: 2,
     },
     {
+      code: "GBP" as const,
+      symbol: "£" as const,
+      scale: 2,
+    },
+    {
       code: "BTC" as const,
       symbol: "₿" as const,
       scale: 8,

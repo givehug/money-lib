@@ -28,6 +28,33 @@ type Locale = {
   decimalSeparator: "." | ",";
 };
 
+export const defaultConfig = {
+  currencies: [
+    {
+      code: "EUR" as const,
+      symbol: "€" as const,
+      scale: 2,
+    },
+    {
+      code: "USD" as const,
+      symbol: "$" as const,
+      scale: 2,
+    },
+    {
+      code: "GBP" as const,
+      symbol: "£" as const,
+      scale: 2,
+    },
+    {
+      code: "BTC" as const,
+      symbol: "₿" as const,
+      scale: 8,
+    },
+  ],
+  defaultCurrency: "EUR" as const,
+  defaultRoundingMethod: "bankers" as const,
+};
+
 export const config: Config = {
   defaultCurrency: "EUR",
   defaultLocale: "NL",

@@ -30,7 +30,7 @@ import {
   min,
   max,
   abs,
-} from "./money";
+} from "./core";
 
 import type { ChainedMoney, Cents, Money } from "./types";
 
@@ -60,6 +60,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
       moneyChain(fromFloatString(amount, currency)),
 
     toInt: () => toInt(_m),
+
     toCents: () => toInt(_m),
     toFloat: () => toFloat(_m),
 

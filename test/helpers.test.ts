@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { describe, test } from "bun:test";
 
-import { formatIntegerPart } from "../lib/money.js";
+import { formatIntegerPart } from "../lib/core.js";
 import { roundBank } from "../lib/helpers.js";
 
 describe("helpers", () => {

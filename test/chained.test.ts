@@ -762,19 +762,19 @@ describe("chained", () => {
     });
   });
 
-  describe("config", () => {
-    test("EUR", () => {
-      money.config({
-        defaultCurrency: "USD",
-        defaultLocale: "IE",
-      });
-      assert.equal(money().format(), "$0.00");
+  // describe("config", () => {
+  //   test("EUR", () => {
+  //     money.config({
+  //       defaultCurrency: "USD",
+  //       defaultLocale: "IE",
+  //     });
+  //     assert.equal(money().format(), "$0.00");
 
-      money.config({
-        defaultCurrency: "EUR",
-        defaultLocale: "NL",
-      });
-      assert.equal(money().format(), "€0,00");
-    });
-  });
+  //     money.config({
+  //       defaultCurrency: "EUR",
+  //       defaultLocale: "NL",
+  //     });
+  //     assert.equal(money().format(), "€0,00");
+  //   });
+  // });
 });

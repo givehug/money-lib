@@ -82,7 +82,7 @@ max: (...m) => m;
 // Check if a Money is valid
 validate: () => boolean;
 
-// Split Money into a whole and cents part
+// Split Money into a base and cents part
 split: () => {
   base: number;
   cents: number;
@@ -113,8 +113,8 @@ fmt: (ops?: {
 
 // Advanced Money formatter
 fmts: (locale?: string) => {
-  whole: string;
-  wholeFormatted: string;
+  base: string;
+  baseFormatted: string;
   cents: string;
   currencySymbol: string;
   decimalSeparator: string;

@@ -16,9 +16,11 @@ money("100 eur")
   .fmt(); // €150,00
 ```
 
+<br/>
 <p>
   <img src="docs/init.png" width="550" >
 </p>
+<br/>
 
 <details>
   <summary>extend currencies</summary>

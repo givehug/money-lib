@@ -177,14 +177,9 @@ export type ChainedMoneyV2<CC extends string, CS extends string> = {
   // --- Parsing ---
 
   /**
-   * Parse a string into a Money object
+   * Parse any string into Money
    */
-  parse: (
-    s: string,
-    currency: string,
-    locale?: string,
-    decimalSeparator?: "." | ","
-  ) => ChainedMoneyV2<CC, CS>;
+  parse: (s: string, currency?: string) => ChainedMoneyV2<CC, CS>;
 
   // --- Debug ---
 

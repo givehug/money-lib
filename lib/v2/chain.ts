@@ -90,12 +90,13 @@ export const moneyChain = <CC extends string, CS extends string>(
       };
     },
 
-    parse: (
-      s: string,
-      currency: string,
-      locale?: string,
-      decimalSeparator?: "." | ","
-    ) => nextChain(money.parse(s, currency, locale, decimalSeparator)),
+    parse: (s: string, currency?: string) => {
+      const parsed = parse(s as any);
+      return nextChain({
+        amount: parsed.amount,
+        currency: currency ?? parsed.currency ?? config.defaultCurrency,
+      });
+    },
 
     debug: (prefix = "money:") => {
       console.log(prefix, {

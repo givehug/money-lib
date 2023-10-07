@@ -39,7 +39,12 @@ export const parseMoneyInput = <CC extends string, CS extends string>(
 
   const stringInput = input.trim().toLocaleUpperCase();
 
-  const amount = parseFloat(stringInput.replace(/[^-0-9.]/g, "")) || 0;
+  const amount =
+    parseFloat(
+      stringInput
+        .replace(/,/g, ".") // treat comma as decimal separator
+        .replace(/[^-0-9.]/g, "") // remove non-number related
+    ) || 0;
 
   const currencies = Object.values(config.currencies);
 

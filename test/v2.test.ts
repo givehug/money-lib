@@ -460,52 +460,36 @@ describe("v2", () => {
 
   describe("validation", () => {});
 
-  describe("transfmtion", () => {});
+  describe("transformation", () => {});
 
   describe("parsings", () => {
+    test("works the same as initializer but with wider string type", () => {
+      expect(money().parse("€100").fmt()).toBe("€100,00");
+      expect(money().parse("100.45", "EUR").fmt()).toBe("€100,45");
+      expect(money().parse("100", "EUR").fmt()).toBe("€100,00");
+      expect(money().parse("100 eur").fmt()).toBe("€100,00");
+      expect(money().parse("€ 100").fmt()).toBe("€100,00");
+      expect(money().parse("100,45").fmt()).toBe("€100,45"); // comma treated as decimal separator
+      expect(money(0).parse("10.500,99", "EUR").fmt()).toBe("€10,50"); // thousand separators are ignored
+      expect(money(0).parse("10500.99", "EUR").fmt()).toBe("€10.500,99");
+    });
+
+    test("parses to 0 as fallback", () => {
+      expect(money().parse("xxx").fmt()).toBe("€0,00");
+      expect(money().parse("foo", "USD").fmt()).toBe("$0,00");
+      expect(money().parse("").fmt()).toBe("€0,00");
+    });
+
     test("EUR", () => {
       const expected = {
         currency: "EUR",
         amount: 1050099,
       };
       assert.ok(
-        Bun.deepEquals(money(0).parse("10.500,99", "EUR").json(), expected)
-      );
-      assert.ok(
         Bun.deepEquals(money(0).parse("10500,99", "EUR").json(), expected)
       );
       assert.ok(
         Bun.deepEquals(money(0).parse("10_500 , 99", "EUR").json(), expected)
-      );
-      assert.notDeepEqual(money(0).parse("10500.99", "EUR").json(), expected);
-    });
-
-    test("explicit decimal separator", () => {
-      const expected = {
-        currency: "EUR",
-        amount: 1050099,
-      };
-      assert.ok(
-        Bun.deepEquals(
-          money(0).parse("10,500.99", "EUR", undefined, ".").json(),
-          expected
-        )
-      );
-      assert.ok(
-        Bun.deepEquals(
-          money(0).parse("10500.99", "EUR", undefined, ".").json(),
-          expected
-        )
-      );
-      assert.ok(
-        Bun.deepEquals(
-          money(0).parse("10_500 . 99", "EUR", undefined, ".").json(),
-          expected
-        )
-      );
-      assert.notDeepEqual(
-        money(0).parse("10.500,99", "EUR", undefined, ".").json(),
-        expected
       );
     });
   });

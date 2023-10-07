@@ -34,6 +34,13 @@ Correct rounding (Banker's by default)
 </p>
 <br/>
 
+Parsing a string
+
+<p>
+  <img src="docs/parsing.png" width="550" >
+</p>
+<br/>
+
 Custom currencies
 
 <p>

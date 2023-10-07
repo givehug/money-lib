@@ -6,6 +6,7 @@ import { defaultConfig } from "../lib/config";
 
 describe("v2", () => {
   test("different initializers", () => {
+    // Any of these works:
     money(100);
     money(100, "EUR");
     money(100, "eur");
@@ -21,6 +22,7 @@ describe("v2", () => {
     money("100USD");
     money("100 btc");
 
+    // Must not compile:
     // money("#50.59");
     // money("100 btc").sub("14 foo");
 

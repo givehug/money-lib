@@ -1,13 +1,11 @@
 # 💰 money-lib 💰
 
-### _Simple TypeScript library to work with money_
+### TypeScript library to work with money
 
 [![NPM Version](https://img.shields.io/npm/v/money-lib)](https://www.npmjs.com/package/money-lib)
 
-**Simple**
-
 ```ts
-import { money, setupMoney } from "money-lib/v2";
+import { money } from "money-lib/v2";
 
 money("100 eur")
   .add("€57.99")
@@ -17,8 +15,6 @@ money("100 eur")
   .div(5.56399)
   .fmt(); // €150,00
 ```
-
-**Type Safe**
 
 <p>
   <img src="docs/init.png" width="550" >
@@ -77,8 +73,6 @@ console.log(money.format(finalBalance)); // €138.269,60
 
 ```ts
 {
-  // --- Comparison ---
-
   /**
    * Compare
    */
@@ -134,25 +128,18 @@ console.log(money.format(finalBalance)); // €138.269,60
    */
   max: (m1: MC<CC, CS>, ...m: MC<CC, CS>[]) => ChainedMoneyV2<CC, CS>;
 
-  // --- Validation ---
-
   /**
    * Check if a Money is valid
    */
   validate: () => boolean;
 
-  // --- Transformation ---
-
   /**
    * Split Money into a whole and cents part
-   * @example split(m) -> { whole: 1, cents: 50 }
    */
   split: () => {
     base: number;
     cents: number;
   };
-
-  // --- Arithmetic ---
 
   /**
    * Add multiple Money inputs
@@ -185,8 +172,6 @@ console.log(money.format(finalBalance)); // €138.269,60
    */
   abs: () => ChainedMoneyV2<CC, CS>;
 
-  // --- Formatting ---
-
   /**
    * Format Money
    */
@@ -218,8 +203,6 @@ console.log(money.format(finalBalance)); // €138.269,60
     sign: "+" | "-" | "";
   };
 
-  // --- Parsing ---
-
   /**
    * Parse a string into a Money object
    */
@@ -230,21 +213,15 @@ console.log(money.format(finalBalance)); // €138.269,60
     decimalSeparator?: "." | ","
   ) => ChainedMoneyV2<CC, CS>;
 
-  // --- Debug ---
-
   /**
    * Log a Money object to the console
    */
   debug: (prefix?: string) => ChainedMoneyV2<CC, CS>;
 
-  // --- Serialization ---
-
   /**
    * Return the Money object
    */
   json: () => Money;
-
-  // --- Conversion ---
 
   /**
    * Return the Money object as an int
@@ -259,8 +236,12 @@ console.log(money.format(finalBalance)); // €138.269,60
   /**
    * Return the Money object as a float
    */
-  float: () => number;
   number: () => number;
+
+  /**
+   * Return the Money object as a float (alias for number())
+   */
+  float: () => number;
 
   /**
    * Return the Money object as a string

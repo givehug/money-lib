@@ -4,6 +4,8 @@
 
 [![NPM Version](https://img.shields.io/npm/v/money-lib)](https://www.npmjs.com/package/money-lib)
 
+<br/>
+
 ```ts
 import { money } from "money-lib/v2";
 

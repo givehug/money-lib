@@ -24,7 +24,9 @@ export type MoneyV2<
   | `${number}${Lowercase<CurrencyCode>}`
   | `${number} ${Lowercase<CurrencyCode>}`
   | `${number}${CurrencyCode}`
-  | `${number} ${CurrencyCode}`;
+  | `${number} ${CurrencyCode}`
+  | { cents: number; currency: CurrencyCode }
+  | { decimal: number; currency: CurrencyCode };
 
 type MC<CC extends string, CS extends string> =
   | MoneyV2<CC, CS>

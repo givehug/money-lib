@@ -20,6 +20,10 @@ describe("v2", () => {
     expect(m.float()).toBe(834.6);
     expect(m.cents()).toBe(83460);
 
+    expect(money().fmt()).toBe("€0,00");
+    expect(money({ cents: 50, currency: "EUR" }).fmt()).toBe("€0,50");
+    expect(money({ decimal: 5.45, currency: "EUR" }).fmt()).toBe("€5,45");
+
     // must not compile:
     // money("🎃 15");
     // money("15 spooky");

@@ -1,5 +1,4 @@
 import * as money from "../core";
-import type { Money } from "../types";
 import type { ChainedMoneyV2, ConfigV2, MoneyV2 } from "./types";
 import { symbolChain } from "./types";
 import { setConfig, config } from "../config";
@@ -9,7 +8,7 @@ import { parseMoneyInput } from "./helpers";
  * @beta This is an beta API V2.
  */
 export const moneyChain = <CC extends string, CS extends string>(
-  input: MoneyV2<CC, CS> | ChainedMoneyV2<CC, CS>,
+  input?: MoneyV2<CC, CS> | ChainedMoneyV2<CC, CS>,
   currency?: CC | Lowercase<CC>
 ): ChainedMoneyV2<CC, CS> => {
   const nextChain = moneyChain<CC, CS>;

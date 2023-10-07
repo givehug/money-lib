@@ -6,7 +6,8 @@
   "scripts": {
     "test": "bun test",
     "build": "tsc --project tsconfig.build.json",
-    "release": "bun build && bun publish"
+    "release": "npm run build && npm publish",
+    "release:beta": "npm run build && npm publish --tag beta"
   },
   "repository": {
     "type": "git",

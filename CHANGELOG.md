@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.5 (2023-10-08)
+
+- include V2 beta into build
+
 ## v2.0.0-beta.0 (2023-10-07)
 
 non-breaking

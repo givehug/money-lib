@@ -9,49 +9,49 @@ This is V2 API. V1 docs are [here](docs/README_V1.md).
 <br/>
 
 <p>
-  <img src="docs/init.gif" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/fcd90cf7-dfb3-4210-8a74-b27349a55d6b" width="550" >
 </p>
 <br/>
 
 Simple API
 
 <p>
-  <img src="docs/initV2.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/b3077cd0-721f-44a1-b70f-3ab23265c8a7" width="550" >
 </p>
 <br/>
 
 Type safe
 
 <p>
-  <img src="docs/typeSafe.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/ddeb293b-a528-4b95-9806-d0da50a3f551" width="550" >
 </p>
 <br/>
 
 Correct rounding (Banker's by default)
 
 <p>
-  <img src="docs/test.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/cefe7de3-a6db-464b-9f2a-a98622f6467a" width="550" >
 </p>
 <br/>
 
 Parsing a string
 
 <p>
-  <img src="docs/parsing.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/bc333675-b6fb-4350-870a-84abafcd1e1e" width="550" >
 </p>
 <br/>
 
 Custom currencies
 
 <p>
-  <img src="docs/customCurrencies.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/100ee765-f4bb-4920-a99d-566e9f4c90e1" width="550" >
 </p>
 <br/>
 
 Standalone utils
 
 <p>
-  <img src="docs/utils.png" width="550" >
+  <img src="https://github.com/givehug/money-lib/assets/10002142/9817cd71-7c0d-44cd-aef4-ffb34b44b2a7" width="550" >
 </p>
 <br/>
 

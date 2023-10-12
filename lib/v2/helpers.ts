@@ -37,7 +37,11 @@ export const parseMoneyInput = <CC extends string, CS extends string>(
     return input;
   }
 
-  const stringInput = input.trim().toLocaleUpperCase();
+  let stringInput = input.trim().toLocaleUpperCase();
+
+  const hasCents = stringInput.includes("CENTS");
+
+  stringInput = stringInput.replace("CENTS", "");
 
   const amount =
     parseFloat(
@@ -52,5 +56,7 @@ export const parseMoneyInput = <CC extends string, CS extends string>(
     currencies.find((c) => stringInput.startsWith(c.symbol)) ||
     currencies.find((c) => stringInput.endsWith(c.code));
 
-  return money.fromFloat(amount, currency?.code ?? config.defaultCurrency);
+  const from = hasCents ? money.fromInt : money.fromFloat;
+
+  return from(amount, currency?.code ?? config.defaultCurrency);
 };

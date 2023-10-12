@@ -14,6 +14,16 @@ describe("v2", () => {
     money("100eur");
     money("100 btc");
 
+    // with cents
+    money("100cents");
+    money("100 cents");
+    money("€100cents");
+    money("€ 100 cents ");
+    money("100 EUR cents");
+    money("100EURcents");
+    money("100 cents EUR");
+    money("100 cents", "EUR");
+
     const m = money("100 eur").add("€57.99").sub(7.99).mul(5.56399);
 
     expect(m.fmt()).toBe("€834,60");
@@ -361,7 +371,7 @@ describe("v2", () => {
     });
   });
 
-  describe("fmtting", () => {
+  describe("formatting", () => {
     test("fmt", () => {
       assert.equal(money(0).fmt(), "€0,00");
       assert.equal(money(0.05).fmt(), "€0,05");

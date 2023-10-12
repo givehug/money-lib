@@ -12,19 +12,30 @@ export type ConfigV2<CC extends string, CS extends string> = {
   defaultRoundingMethod: "bankers" | "up" | "down" | "round";
 };
 
+type Tpl<T extends string | number> = `${T}` | ` ${T}` | `${T} ` | ` ${T} `;
+
+type CentsTpl = Tpl<"cents">;
+type ValueTpl = Tpl<number>;
+
 export type MoneyV2<
   CurrencyCode extends string,
-  CurrencySymbol extends string
+  CurrencySymbol extends string,
+  CodeTpl extends string = Tpl<CurrencyCode>,
+  SymbolTpl extends string = Tpl<CurrencySymbol>
 > =
   | Money
   | number
-  | `${number}`
-  | `${CurrencySymbol}${number}`
-  | `${CurrencySymbol} ${number}`
-  | `${number}${Lowercase<CurrencyCode>}`
-  | `${number} ${Lowercase<CurrencyCode>}`
-  | `${number}${CurrencyCode}`
-  | `${number} ${CurrencyCode}`
+  | null
+  | ValueTpl
+  | `${ValueTpl}${CentsTpl}`
+  | `${SymbolTpl}${ValueTpl}`
+  | `${SymbolTpl}${ValueTpl}${CentsTpl}`
+  | `${ValueTpl}${Lowercase<CodeTpl>}`
+  | `${ValueTpl}${Lowercase<CodeTpl>}${CentsTpl}`
+  | `${ValueTpl}${CentsTpl}${Lowercase<CodeTpl>}`
+  | `${ValueTpl}${CodeTpl}`
+  | `${ValueTpl}${CodeTpl}${CentsTpl}`
+  | `${ValueTpl}${CentsTpl}${CodeTpl}`
   | { cents: number; currency: CurrencyCode }
   | { decimal: number; currency: CurrencyCode };
 

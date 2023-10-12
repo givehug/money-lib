@@ -33,5 +33,9 @@
   "devDependencies": {
     "tsx": "3.12.1",
     "bun-types": "^1.0.1"
+  },
+  "exports": {
+    "./v1": "./dist/v1.js",
+    "./utils": "./dist/utils.js"
   }
 }

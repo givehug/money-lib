@@ -1,4 +1,4 @@
-import { money } from "../v2";
+import { money } from "../index";
 
 // formatting is way slower than other methods, ~50_000 ops/s
 

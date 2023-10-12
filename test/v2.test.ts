@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { describe, test, expect } from "bun:test";
 
-import { setupMoney, money } from "../v2";
+import { setupMoney, money } from "../index";
 import { defaultConfig } from "../lib/config";
 
 describe("v2", () => {

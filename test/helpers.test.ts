@@ -1,8 +1,9 @@
 import assert from "node:assert";
-import { describe, test } from "bun:test";
+import { describe, test, expect } from "bun:test";
 
 import { formatIntegerPart } from "../lib/core.js";
 import { roundBank } from "../lib/helpers.js";
+import { parseMoneyInput } from "../lib/v2/helpers.js";
 
 describe("helpers", () => {
   describe("formatIntegerPart", () => {
@@ -53,5 +54,62 @@ describe("helpers", () => {
     assert.strictEqual(roundBank(12345.6789, -1), 12350);
     assert.strictEqual(roundBank(12345.6789, -2), 12300);
     assert.strictEqual(roundBank(12345.6789, -3), 12000);
+  });
+
+  test("parseMoneyInput", () => {
+    expect(parseMoneyInput()).toEqual({
+      amount: 0,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput(null)).toEqual({
+      amount: 0,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput(0)).toEqual({
+      amount: 0,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("10.42")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("1042 cents ")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("€ 10.42")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("$10cents")).toEqual({
+      amount: 10,
+      currency: "USD",
+    });
+
+    expect(parseMoneyInput("10.42 EUR")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("1042 EUR cents")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput("1042 cents EUR")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
+    expect(parseMoneyInput(`${1042}cents`)).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
   });
 });

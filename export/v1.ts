@@ -1,6 +1,6 @@
-export type { Money, Cents } from "./lib/types";
+export type { Money, Cents } from "../lib/types";
 
-import { default as money } from "./lib/chain";
+import { default as money } from "../lib/v1/chain";
 
 export default money;
 
@@ -43,6 +43,6 @@ export {
 
   // Parsing
   parse,
-} from "./lib/core";
+} from "../lib/core";
 
-export { setConfig } from "./lib/config";
+export { setConfig } from "../lib/config";

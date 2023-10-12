@@ -1,4 +1,4 @@
-import { config, setConfig } from "./config";
+import { config, setConfig } from "../config";
 import {
   zero,
   fromInt,
@@ -30,9 +30,10 @@ import {
   min,
   max,
   abs,
-} from "./core";
+} from "../core";
 
-import type { ChainedMoney, Cents, Money } from "./types";
+import type { Cents, Money } from "../types";
+import type { ChainedMoney } from "./types";
 
 // unwrap Money from chain, or init with zero value
 const unwrap = (m: Money | ChainedMoney): Money => {

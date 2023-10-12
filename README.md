@@ -16,7 +16,7 @@ This is V2 API. V1 docs are [here](docs/README_V1.md).
 Simple API
 
 <p>
-  <img src="docs/init.png" width="550" >
+  <img src="docs/initV2.png" width="550" >
 </p>
 <br/>
 

@@ -1,6 +1,11 @@
 import { config, getCurrency, getDefaultRounder, getLocale } from "./config";
 import type { Cents, Money } from "./types";
 
+/**
+ * Cache Intl.NumberFormat instances per locale.
+ */
+const formatterCache = new Map<string, Intl.NumberFormat>();
+
 // ------ Initialization ------ //
 
 export const zero = (currency = config.defaultCurrency) => {
@@ -228,7 +233,12 @@ export const formatIntegerPart = (
   integerPart: number,
   locale = config.defaultLocale
 ) => {
-  return new Intl.NumberFormat(locale).format(integerPart);
+  let formatter = formatterCache.get(locale);
+  if (!formatter) {
+    formatter = new Intl.NumberFormat(locale);
+    formatterCache.set(locale, formatter);
+  }
+  return formatter.format(integerPart);
 };
 
 export const formatParts = (

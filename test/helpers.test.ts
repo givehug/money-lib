@@ -107,6 +107,11 @@ describe("helpers", () => {
       currency: "EUR",
     });
 
+    expect(parseMoneyInput("1042 cents eur")).toEqual({
+      amount: 1042,
+      currency: "EUR",
+    });
+
     expect(parseMoneyInput(`${1042}cents`)).toEqual({
       amount: 1042,
       currency: "EUR",

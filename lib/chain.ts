@@ -41,7 +41,7 @@ const unwrap = (m: Money | ChainedMoney): Money => {
 
 /**
  * @deprecated Use V2
- * @example import { money } from "money-lib/v2"
+ * @example import { money } from "money-lib/dist/v2"
  */
 const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
   const _m = unwrap(money);

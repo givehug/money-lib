@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.6.6 (2023-10-12)
+
+- add support for cents in string template inputs in V2
+- fix V2 import in examples
+
 ## v1.6.5 (2023-10-08)
 
 - include V2 beta into build

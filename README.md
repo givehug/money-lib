@@ -4,7 +4,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/money-lib)](https://www.npmjs.com/package/money-lib)
 
-This is V2 API. V1 docs are [here](docs/README_V1.md).
+_This is V2 API. V1 docs are [here](docs/README_V1.md). You can still use deprecated V1 as before by importing `money-lib/v1`._
 
 <br/>
 

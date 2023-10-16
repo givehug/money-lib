@@ -21,9 +21,9 @@ import {
   isPositive,
   isNegative,
   isValid,
-  split,
+  splitV1,
   format,
-  formatParts,
+  formatPartsV1,
   parse,
   toString,
   toFloatString,
@@ -101,7 +101,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
     isValid: () => isValid(_m),
 
-    split: () => split(_m),
+    split: () => splitV1(_m),
 
     add: (m1: Money | ChainedMoney, ...m: (Money | ChainedMoney)[]) =>
       moneyChain(add(_m, unwrap(m1), ...m.map(unwrap))),
@@ -124,7 +124,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
       trailingZeros?: boolean;
     }) => format(_m, ops),
 
-    formatParts: (locale?: string) => formatParts(_m, locale),
+    formatParts: (locale?: string) => formatPartsV1(_m, locale),
 
     parse: (
       s: string,

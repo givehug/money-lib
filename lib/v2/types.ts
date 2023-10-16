@@ -116,7 +116,8 @@ export type ChainedMoneyV2<CC extends string, CS extends string> = {
    */
   split: () => {
     base: number;
-    cents: number;
+    centsFloat: number; // 1.5 -> 0.5
+    centsInt: number; // 1.5 -> 50
   };
 
   // --- Arithmetic ---

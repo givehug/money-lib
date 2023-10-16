@@ -60,10 +60,9 @@ export const toInt = (m: Money): Cents => {
 };
 
 export const toFloat = (m: Money): number => {
-  const scale = getCurrencyScale(m);
-  const { whole, cents } = split(m);
+  const { base, centsFloat } = split(m);
 
-  return whole + cents / scale;
+  return base + centsFloat;
 };
 
 export const toString = (m: Money): string => {
@@ -72,9 +71,9 @@ export const toString = (m: Money): string => {
 
 export const toFloatString = (m: Money): string => {
   const scale = getCurrencyScale(m);
-  const { whole, cents } = split(m);
+  const { base, centsInt } = split(m);
 
-  return `${whole}.${cents.toString().padStart(Math.log10(scale), "0")}`;
+  return `${base}.${centsInt.toString().padStart(Math.log10(scale), "0")}`;
 };
 
 // ------ Arithmetics ------ //
@@ -182,12 +181,23 @@ export const isValid = (m: any): m is Money => {
 
 // ------ Transformation ------ //
 
-export const split = (m: Money): { whole: number; cents: number } => {
+export const splitV1 = (m: Money): { whole: number; cents: number } => {
   const scale = getCurrencyScale(m);
   const whole = Math.trunc(m.amount / scale);
   const cents = m.amount - whole * scale;
 
   return { whole, cents };
+};
+
+export const split = (
+  m: Money
+): { base: number; centsInt: number; centsFloat: number } => {
+  const scale = getCurrencyScale(m);
+  const base = Math.trunc(m.amount / scale);
+  const centsInt = m.amount - base * scale;
+  const centsFloat = +`0.${centsInt}`;
+
+  return { base, centsFloat, centsInt };
 };
 
 // ------ Formatting ------ //
@@ -213,9 +223,9 @@ export const format = (
   let formatted = "";
 
   if (!cents && parts.cents === "0".repeat(getCurrency(m.currency).precision)) {
-    formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
+    formatted = `${signSymbol}${parts.currencySymbol}${parts.baseFormatted}`;
   } else {
-    formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;
+    formatted = `${signSymbol}${parts.currencySymbol}${parts.baseFormatted}${parts.decimalSeparator}${parts.cents}`;
   }
 
   if (!trailingZeros) {
@@ -241,7 +251,7 @@ export const formatIntegerPart = (
   return formatter.format(integerPart);
 };
 
-export const formatParts = (
+export const formatPartsV1 = (
   m: Money,
   locale = config.defaultLocale
 ): {
@@ -254,7 +264,7 @@ export const formatParts = (
 } => {
   const { symbol, precision } = getCurrency(m.currency);
   const { decimalSeparator } = getLocale(locale);
-  const { whole, cents } = split(m);
+  const { whole, cents } = splitV1(m);
   const absWhole = Math.abs(whole);
   const wholeFormatted = formatIntegerPart(absWhole, locale);
   const sign = getAmountSign(m);
@@ -263,6 +273,34 @@ export const formatParts = (
     whole: `${absWhole}`,
     wholeFormatted,
     cents: `${Math.abs(cents)}`.padStart(precision, "0"),
+    currencySymbol: symbol,
+    decimalSeparator,
+    sign,
+  };
+};
+
+export const formatParts = (
+  m: Money,
+  locale = config.defaultLocale
+): {
+  base: string;
+  baseFormatted: string;
+  cents: string;
+  currencySymbol: string;
+  decimalSeparator: string;
+  sign: "+" | "-" | "";
+} => {
+  const { symbol, precision } = getCurrency(m.currency);
+  const { decimalSeparator } = getLocale(locale);
+  const { base, centsInt } = split(m);
+  const absBase = Math.abs(base);
+  const baseFormatted = formatIntegerPart(absBase, locale);
+  const sign = getAmountSign(m);
+
+  return {
+    base: `${absBase}`,
+    baseFormatted,
+    cents: `${Math.abs(centsInt)}`.padStart(precision, "0"),
     currencySymbol: symbol,
     decimalSeparator,
     sign,

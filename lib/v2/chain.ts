@@ -50,13 +50,7 @@ export const moneyChain = <CC extends string, CS extends string>(
 
     validate: () => money.isValid(_m),
 
-    split: () => {
-      const split = money.split(_m);
-      return {
-        base: split.whole,
-        cents: split.cents,
-      };
-    },
+    split: () => money.split(_m),
 
     add: (m1, ...m) => nextChain(money.add(_m, parse(m1), ...m.map(parse))),
 
@@ -78,17 +72,7 @@ export const moneyChain = <CC extends string, CS extends string>(
       trailingZeros?: boolean;
     }) => money.format(_m, ops),
 
-    fmts: (locale?: string) => {
-      const fmtd = money.formatParts(_m, locale);
-      return {
-        base: fmtd.whole,
-        cents: fmtd.cents,
-        baseFormatted: fmtd.wholeFormatted,
-        currencySymbol: fmtd.currencySymbol,
-        decimalSeparator: fmtd.decimalSeparator,
-        sign: fmtd.sign,
-      };
-    },
+    fmts: (locale?: string) => money.formatParts(_m, locale),
 
     parse: (s: string, currency?: string) => {
       const parsed = parse(s as any);

@@ -182,9 +182,11 @@ export type ChainedMoney = {
   format: (ops?: {
     locale?: string;
     /**
-     * default: true; if false, 00 cents will be omitted
+     * - true: always show cents (default)
+     * - "no": never show cents
+     * - false | "ifAny": show cents only if they are not zero
      */
-    cents?: boolean;
+    cents?: boolean | "no" | "ifAny";
     /**
      * default: true; if false, 1.50 will be formatted as 1.5
      */

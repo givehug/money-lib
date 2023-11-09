@@ -118,7 +118,7 @@ const moneyChain = (money: Money | ChainedMoney = zero()): ChainedMoney => {
 
     format: (ops?: {
       locale?: string;
-      cents?: boolean;
+      cents?: boolean | "no" | "ifAny";
       withPlusSign?: boolean;
       trailingZeros?: boolean;
     }) => format(_m, ops),

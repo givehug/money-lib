@@ -190,7 +190,12 @@ export const split = (m: Money): { whole: number; cents: number } => {
 export const format = (
   m: Money,
   ops?: {
-    cents?: boolean; // default: true; if false, 00 cents will be omitted
+    /**
+     * - true: always show cents
+     * - "no": never show cents
+     * - false | "ifAny": show cents only if they are not zero
+     */
+    cents?: boolean | "ifAny" | "no"; // default: true; if false, 00 cents will be omitted
     locale?: string;
     trailingZeros?: boolean; // default: true; if false, 1.50 will be formatted as 1.5
     withPlusSign?: boolean; // default: false; if true, positive numbers will be prefixed with a plus sign
@@ -207,7 +212,12 @@ export const format = (
 
   let formatted = "";
 
-  if (!cents && parts.cents === "0".repeat(getCurrency(m.currency).precision)) {
+  if (
+    (!cents || cents === "ifAny") &&
+    parts.cents === "0".repeat(getCurrency(m.currency).precision)
+  ) {
+    formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
+  } else if (cents === "no") {
     formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}`;
   } else {
     formatted = `${signSymbol}${parts.currencySymbol}${parts.wholeFormatted}${parts.decimalSeparator}${parts.cents}`;

@@ -573,8 +573,20 @@ describe("chained", () => {
         "€1.000,42"
       );
       assert.equal(
+        money({ currency: "EUR", amount: 100042 }).format({
+          cents: "ifAny",
+        }),
+        "€1.000,42"
+      );
+      assert.equal(
         money({ currency: "EUR", amount: 100000 }).format({
           cents: false,
+        }),
+        "€1.000"
+      );
+      assert.equal(
+        money({ currency: "EUR", amount: 100000 }).format({
+          cents: "ifAny",
         }),
         "€1.000"
       );
@@ -603,6 +615,12 @@ describe("chained", () => {
         "€1,000.42"
       );
       assert.equal(money().fromFloat(0.01).format(), "€0,01");
+      assert.equal(
+        money({ currency: "EUR", amount: 100042 }).format({
+          cents: "no",
+        }),
+        "€1.000"
+      );
     });
 
     test("format negative amount", () => {

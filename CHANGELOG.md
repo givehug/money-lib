@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.6.7 (2023-11-09)
+
+- add cents: "no", "ifAny" formatting options
+
 ## v1.6.6 (2023-10-12)
 
 - add support for cents in string template inputs in V2
